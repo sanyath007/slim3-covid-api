@@ -7,7 +7,7 @@ $app->options('/{routes:.+}', function($request, $response, $args) {
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);
     return $response
-            ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3001')
+            ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3000')
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
@@ -36,6 +36,12 @@ $app->get('/room-groups/{id}', 'RoomGroupController:getById');
 $app->post('/room-groups', 'RoomGroupController:store');
 $app->put('/room-groups/{id}', 'RoomGroupController:update');
 $app->delete('/room-groups/{id}', 'RoomGroupController:delete');
+
+$app->get('/buildings', 'BuildingController:getAll');
+$app->get('/buildings/{id}', 'BuildingController:getById');
+$app->post('/buildings', 'BuildingController:store');
+$app->put('/buildings/{id}', 'BuildingController:update');
+$app->delete('/buildings/{id}', 'BuildingController:delete');
 
 $app->get('/amenities', 'AmenityController:getAll');
 $app->get('/amenities/{id}', 'AmenityController:getById');

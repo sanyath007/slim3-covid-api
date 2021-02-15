@@ -10,20 +10,16 @@ class RoomGroupController extends Controller
 {
     public function getAll($request, $response, $args)
     {
-        $data = [
-            'groups' => RoomGroup::all()
-        ];
+        $groups = RoomGroup::all();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write(json_encode($groups, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
     
     public function getById($request, $response, $args)
     {
-        $data = [
-            'group' => RoomGroup::where('id', $args['id'])->first()
-        ];
+        $group = RoomGroup::where('id', $args['id'])->first();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")

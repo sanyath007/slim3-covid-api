@@ -95,6 +95,10 @@ $container['RoomGroupController'] = function($c) {
     return new App\Controllers\RoomGroupController($c);
 };
 
+$container['BuildingController'] = function($c) {
+    return new App\Controllers\BuildingController($c);
+};
+
 $container['AmenityController'] = function($c) {
     return new App\Controllers\AmenityController($c);
 };
