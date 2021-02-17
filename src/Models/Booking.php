@@ -18,6 +18,11 @@ class Booking extends Model
         return $this->belongsTo(Ward::class, 'ward_id', 'ward');
     }
     
+    public function an()
+    {
+        return $this->belongsTo(Ip::class, 'an', 'an');
+    }
+    
     public function bookedUser()
     {
         return $this->belongsTo(Person::class, 'order_by', 'person_id');

@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class Patient extends Model
 {
     protected $connection = "hos";
-    protected $table = "suppliers";
+    protected $table = "patient";
 }

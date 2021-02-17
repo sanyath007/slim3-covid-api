@@ -4,17 +4,17 @@ namespace App\Controllers;
 
 use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
-use App\Models\Order;
-use App\Models\OrderItem;
+use App\Models\Booking;
+// use App\Models\OrderItem;
 
-class OrderController extends Controller
+class BookingController extends Controller
 {
     public function generateOrderNo($request, $response, $args)
     {
-        $order = Order::orderBy('order_no', 'DESC')->first();
+        $bookings = Booking::orderBy('bookings_id', 'DESC')->first();
 
         $startId = substr((date('Y') + 543), 2);
-        $tmpLastId =  ((int)(substr($order->order_no, 4))) + 1;
+        $tmpLastId =  ((int)(substr($bookings->bookings_id, 4))) + 1;
         $lastId = $startId.sprintf("%'.05d", $tmpLastId);
 
         return $response
@@ -27,9 +27,12 @@ class OrderController extends Controller
     {
         $page = (int)$request->getQueryParam('page');
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
-        $orders = paginate(Order::with('orderItem', 'dept'), 10, $page, $link);
+
+        $model = Booking::with('an','an.patient','an.ward','room');
+
+        $bookings = paginate($model, 'book_id', 10, $page, $link);
         
-        $data = json_encode($orders, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
+        $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
         return $response
                 ->withStatus(200)
