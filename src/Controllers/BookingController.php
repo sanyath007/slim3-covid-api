@@ -11,10 +11,10 @@ class BookingController extends Controller
 {
     public function generateOrderNo($request, $response, $args)
     {
-        $bookings = Booking::orderBy('bookings_id', 'DESC')->first();
+        $bookings = Booking::orderBy('book_id', 'DESC')->first();
 
         $startId = substr((date('Y') + 543), 2);
-        $tmpLastId =  ((int)(substr($bookings->bookings_id, 4))) + 1;
+        $tmpLastId =  ((int)(substr($bookings->book_id, 4))) + 1;
         $lastId = $startId.sprintf("%'.05d", $tmpLastId);
 
         return $response
