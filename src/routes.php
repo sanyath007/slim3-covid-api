@@ -70,6 +70,9 @@ $app->get('/ips/{an}', 'IpController:getById');
 $app->get('/wards', 'WardController:getAll');
 $app->get('/wards/{ward}', 'WardController:getById');
 
+$app->get('/patients', 'PatientController:getAll');
+$app->get('/patients/{hn}', 'PatientController:getById');
+
 $app->group('/api', function(Slim\App $app) { 
     $app->get('/users', 'UserController:index');
     $app->get('/users/{loginname}', 'UserController:getUser');

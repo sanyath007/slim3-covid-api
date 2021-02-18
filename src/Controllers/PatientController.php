@@ -10,20 +10,28 @@ class PatientController extends Controller
 {
     public function getAll($request, $response, $args)
     {
-        $Patient = Patient::all();
+        $page = (int)$request->getQueryParam('page');
+        $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
-        return $response->withStatus(200)
+        $model = Patient::where('death', '<>', 'Y');
+
+        $bookings = paginate($model, 'hn', 10, $page, $link);
+        
+        $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
+
+        return $response
+                ->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($Patient, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write($data);
     }
     
     public function getById($request, $response, $args)
     {
-        $Patient = Patient::where('Patient_id', $args['id'])->first();
+        $patient = Patient::where('hn', $args['hn'])->first();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($Patient, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write(json_encode($patient, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
 
     // public function store($request, $response, $args)

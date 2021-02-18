@@ -10,11 +10,28 @@ class IpController extends Controller
 {
     public function getAll($request, $response, $args)
     {
-        $ips = Ip::all();
+        $conditions = [];
+        $page = (int)$request->getQueryParam('page');
+        $ward = (int)$request->getQueryParam('ward');
 
-        return $response->withStatus(200)
+        if(!empty($ward)) array_push($conditions, ['ward' => $ward]);
+
+        $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
+
+        if(count($conditions) > 0) {
+            $model = Ip::with('patient', 'ward')->whereNull('dchdate')->where($conditions);
+        } else {
+            $model = Ip::with('patient', 'ward')->whereNull('dchdate');
+        }
+
+        $bookings = paginate($model, 'regdate', 10, $page, $link);
+        
+        $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
+
+        return $response
+                ->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($ips, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write($data); 
     }
     
     public function getById($request, $response, $args)

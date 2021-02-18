@@ -21,6 +21,6 @@ class Ip extends Model
     
     public function ward()
     {
-        return $this->hasMany(Ward::class, 'ward', 'ward');
+        return $this->belongsTo(Ward::class, 'ward', 'ward');
     }
 }
