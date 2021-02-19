@@ -52,45 +52,41 @@ class BookingController extends Controller
 
     public function store($request, $response, $args)
     {
-        $post = (array)$request->getParsedBody();
+        try {
+            $post = (array)$request->getParsedBody();
 
-        $order = new Order;
-        $order->order_no = $post['order_no'];
-        $order->order_date = $post['order_date'];
-        $order->order_by = $post['order_by'];
-        $order->order_dept = $post['order_dept'];
-        $order->order_reason = $post['order_reason'];
-        $order->remark = $post['remark'];
-        // $order->status = $post['status'];
+            $booking = new Booking;
+            $booking->an = $post['an'];
+            $booking->book_date = $post['book_date'];
+            $booking->description = $post['description'];
+            $booking->remark = $post['remark'];
+            $booking->room_types = $post['room_types'];
+            $booking->user = $post['user'];
+            $booking->ward = $post['ward'];
 
-        if($order->save()) {
-            try {
-                foreach($post['items'] as $item) {
-                    $orderItem = new OrderItem;
-                    $orderItem->no = $item['no'];
-                    $orderItem->order_id = $order->id;
-                    $orderItem->item_id = $item['item_id'];
-                    $orderItem->amount = $item['amount'];
-                    $orderItem->total = $item['total'];
-                    $orderItem->save();
-                }
-                
+            if($booking->save()) {
                 return $response
                         ->withStatus(200)
                         ->withHeader("Content-Type", "application/json")
-                        ->write(json_encode($order, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-            } catch (\Exception $ex) {
-                /** Delete last record of orders data if insert failed */
-                Order::find($order->id)->delete();
-
+                        ->write(json_encode($booking, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            } else {
                 return $response
-                        ->withStatus(500)
-                        ->withHeader("Content-Type", "application/json")
-                        ->write(json_encode([
-                            'status' => 0,
-                            'message' => $ex->getMessage()
-                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                    ->withStatus(500)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode([
+                        'status' => 0,
+                        'message' => 'Something went wrong!!'
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
             }
+        } catch (\Exception $ex) {
+            return $response
+                    ->withStatus(500)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode([
+                        'status' => 0,
+                        'message' => $ex->getMessage()
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
+        
     }
 }
