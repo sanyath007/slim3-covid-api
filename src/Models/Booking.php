@@ -15,7 +15,7 @@ class Booking extends Model
 
     public function ward()
     {
-        return $this->belongsTo(Ward::class, 'ward_id', 'ward');
+        return $this->belongsTo(Ward::class, 'ward', 'ward');
     }
     
     public function an()
@@ -23,8 +23,8 @@ class Booking extends Model
         return $this->belongsTo(Ip::class, 'an', 'an');
     }
     
-    public function bookedUser()
+    public function user()
     {
-        return $this->belongsTo(Person::class, 'order_by', 'person_id');
+        return $this->belongsTo(Staff::class, 'user', 'person_id');
     }
 }

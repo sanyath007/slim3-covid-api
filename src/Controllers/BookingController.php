@@ -28,7 +28,7 @@ class BookingController extends Controller
         $page = (int)$request->getQueryParam('page');
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
-        $model = Booking::with('an','an.patient','an.ward','room');
+        $model = Booking::with('an','an.patient','an.ward','room','user');
 
         $bookings = paginate($model, 'book_id', 10, $page, $link);
         
