@@ -40,30 +40,6 @@ class RoomController extends Controller
 
     public function store($request, $response, $args)
     {
-        // TODO: modify validation
-        // $validation = $this->validator->validate($request, [
-        //     'name' => v::notEmpty(),
-        //     'unit' => v::notEmpty()->numeric(),
-        //     'cost' => v::notOptional()->floatVal(),
-        //     'stock' => v::notOptional()->numeric(),
-        //     'min' => v::notOptional()->numeric(),
-        //     'balance' => v::notOptional()->numeric(),
-        //     'item_type' => v::notEmpty()->numeric(),
-        //     'item_group' => v::notEmpty()->numeric(),
-        // ]);
-        
-        // if ($validation->failed()) {
-        //     $data = [
-        //         'status' => 0,
-        //         'errors' => $validation->getMessages(),
-        //         'message' => 'Validation Error!!'
-        //     ];
-
-        //     return $response->withStatus(200)
-        //         ->withHeader("Content-Type", "application/json")
-        //         ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-        // }
-
         $post = (array)$request->getParsedBody();
         
         // TODO: separate uploads to another method
@@ -88,7 +64,7 @@ class RoomController extends Controller
         $room->description = $post['description'];
         $room->room_type = $post['room_type'];
         $room->room_group = $post['room_group'];
-        $room->building_id = $post['building_id'];
+        $room->building = $post['building'];
         $room->floor = $post['floor'];
         $room->room_img_url = $img_url;
         $room->room_status = 0;
@@ -108,29 +84,6 @@ class RoomController extends Controller
 
     public function update($request, $response, $args)
     {
-        $validation = $this->validator->validate($request, [
-            'name' => v::notEmpty(),
-            'unit' => v::notEmpty()->numeric(),
-            'cost' => v::notOptional()->floatVal(),
-            'stock' => v::notOptional()->numeric(),
-            'min' => v::notOptional()->numeric(),
-            'balance' => v::notOptional()->numeric(),
-            'item_type' => v::notEmpty()->numeric(),
-            'item_group' => v::notEmpty()->numeric(),
-        ]);
-        
-        if ($validation->failed()) {
-            $data = [
-                'status' => 0,
-                'errors' => $validation->getMessages(),
-                'message' => 'Validation Error!!'
-            ];
-
-            return $response->withStatus(200)
-                ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-        }
-
         $post = (array)$request->getParsedBody();
 
         $room = Room::where('id', $args['id'])->first();
