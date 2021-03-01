@@ -6,6 +6,7 @@ use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use Respect\Validation\Validator as v;
 use App\Models\Room;
+use App\Models\RoomAmenities;
 
 class RoomController extends Controller
 {
@@ -42,44 +43,70 @@ class RoomController extends Controller
     {
         $post = (array)$request->getParsedBody();
         
-        // TODO: separate uploads to another method
-        /** Upload image */
-        $link = 'http://'.$request->getServerParam('SERVER_NAME').$request->getServerParam('REDIRECT_URL');
-        if(preg_match("/^data:image\/(?<extension>(?:png|gif|jpg|jpeg));base64,(?<image>.+)$/", $post['room_img_url'], $matchings))
-        {
-            $img_data = file_get_contents($post['room_img_url']);
-            $extension = $matchings['extension'];
-            $img_name = uniqid().'.'.$extension;
-            $img_url = str_replace('/rooms', '/assets/uploads/'.$img_name, $link);
-            $file_to_upload = 'assets/uploads/'.$img_name;
+        try {
+            // TODO: separate uploads to another method
+            /** Upload image */
+            $link = 'http://'.$request->getServerParam('SERVER_NAME').$request->getServerParam('REDIRECT_URL');
+            // if(preg_match("/^data:image\/(?<extension>(?:png|gif|jpg|jpeg));base64,(?<image>.+)$/", $post['room_img_url'], $matchings))
+            // {
+            //     $img_data = file_get_contents($post['room_img_url']);
+            //     $extension = $matchings['extension'];
+            //     $img_name = uniqid().'.'.$extension;
+            //     $img_url = str_replace('/rooms', '/assets/uploads/'.$img_name, $link);
+            //     $file_to_upload = 'assets/uploads/'.$img_name;
 
-            if(file_put_contents($file_to_upload, $img_data)) {
-                // echo $img_url;
-            }
-        }
+            //     if(file_put_contents($file_to_upload, $img_data)) {
+            //         // echo $img_url;
+            //     }
+            // }
 
-        $room = new Room;
-        $room->room_no = $post['room_no'];
-        $room->room_name = $post['room_name'];
-        $room->description = $post['description'];
-        $room->room_type = $post['room_type'];
-        $room->room_group = $post['room_group'];
-        $room->building = $post['building'];
-        $room->floor = $post['floor'];
-        $room->room_img_url = $img_url;
-        $room->room_status = 0;
-        
-        if($room->save()) {
+            $room = new Room;
+            $room->room_no = $post['room_no'];
+            $room->room_name = $post['room_name'];
+            $room->description = $post['description'];
+            $room->room_type = $post['room_type'];
+            $room->room_group = $post['room_group'];
+            $room->building = $post['building'];
+            $room->floor = $post['floor'];
+            // $room->room_img_url = $img_url;
+            $room->room_status = 0;
+            
+            if($room->save()) {
+                $newRoomId = $room->id;
+                $amenities = explode(",", $post['amenities']);
+
+                foreach($amenities as $amenity) {
+                    $ra = new RoomAmenities();
+                    $ra->room_id = $newRoomId;
+                    $ra->amenity_id = $amenity;
+                    $ra->status = 1;
+                    $ra->save();
+                }
+    
+                $data = [
+                    'status' => 1,
+                    'message' => 'Insertion successfully!!',
+                    'item' => $room
+                ];
+    
+                return $response->withStatus(200)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            } // end if
+        } catch (\Throwable $th) {
+            /** Delete new room if error occurs */
+            Room::find($newRoomId)->delete();
+            
+            /** And set data to client with http status 500 */
             $data = [
-                'status' => 1,
-                'message' => 'Insertion successfully!!',
-                'item' => $room
+                'status' => 0,
+                'message' => 'Something went wrong!!'
             ];
 
-            return $response->withStatus(200)
+            return $response->withStatus(500)
                     ->withHeader("Content-Type", "application/json")
                     ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-        }
+        } // end trycatch
     }
 
     public function update($request, $response, $args)
