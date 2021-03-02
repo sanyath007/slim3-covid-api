@@ -41,7 +41,9 @@ class RoomController extends Controller
     
     public function getByBuilding($request, $response, $args)
     {
-        $rooms = Room::where('building', $args['id'])->get();
+        $rooms = Room::where('building', $args['id'])
+                    ->orderBy('room_no')
+                    ->get();
                     
         $data = json_encode($rooms, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
