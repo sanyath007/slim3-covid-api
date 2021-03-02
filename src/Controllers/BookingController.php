@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Models\Booking;
-// use App\Models\OrderItem;
+use App\Models\BookingRoom;
 
 class BookingController extends Controller
 {
@@ -28,7 +28,8 @@ class BookingController extends Controller
         $page = (int)$request->getQueryParam('page');
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
-        $model = Booking::with('an','an.patient','an.ward','room','user');
+        $model = Booking::where('book_status', '=', 0)
+                    ->with('an','an.patient','an.ward','room','user');
 
         $bookings = paginate($model, 'book_id', 10, $page, $link);
         
@@ -68,7 +69,11 @@ class BookingController extends Controller
                 return $response
                         ->withStatus(200)
                         ->withHeader("Content-Type", "application/json")
-                        ->write(json_encode($booking, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                        ->write(json_encode([
+                            'status' => 1,
+                            'message' => 'Insertion successfully',
+                            'booking' => $booking
+                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
             } else {
                 return $response
                     ->withStatus(500)
@@ -87,6 +92,50 @@ class BookingController extends Controller
                         'message' => $ex->getMessage()
                     ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
-        
+    }
+
+    public function checkin($request, $response, $args)
+    {
+        try {
+            $post = (array)$request->getParsedBody();
+            
+            $br = new BookingRoom();
+            $br->book_id = $post['bookId'];
+            $br->room_id = $post['roomId'];
+            $br->checkin_date = $post['checkinDate'];
+            $br->checkin_time = $post['checkinTime'];
+            $br->have_observer = $post['haveObserver'];
+            $br->observer_name = $post['observerName'];
+            $br->observer_name = $post['observerTel'];
+
+            if ($br->save()) {
+                Booking::find($post['bookId'])->update(['book_status' => 1]);
+
+                return $response
+                    ->withStatus(200)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode([
+                        'status' => 1,
+                        'message' => 'Insertion successfully',
+                        'data' => $br,
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            } else {
+                return $response
+                    ->withStatus(500)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode([
+                        'status' => 0,
+                        'message' => 'Something went wrong!!'
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            }
+        } catch (\Exception $ex) {
+            return $response
+                    ->withStatus(500)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode([
+                        'status' => 0,
+                        'message' => $ex->getMessage()
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+        }
     }
 }

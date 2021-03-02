@@ -56,6 +56,8 @@ $app->get('/bookings/last/order-no', 'BookingController:generateOrderNo');
 $app->post('/bookings', 'BookingController:store');
 $app->put('/bookings/{id}', 'BookingController:update');
 $app->delete('/bookings/{id}', 'BookingController:delete');
+$app->post('/bookings/checkin', 'BookingController:checkin');
+$app->put('/bookings/checkout/{id}', 'BookingController:checkout');
 
 /** Routes to person db */
 $app->get('/depts', 'DeptController:getAll');
