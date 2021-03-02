@@ -6,6 +6,7 @@ use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Models\Booking;
 use App\Models\BookingRoom;
+use App\Models\Room;
 
 class BookingController extends Controller
 {
@@ -109,7 +110,8 @@ class BookingController extends Controller
             $br->observer_name = $post['observerTel'];
 
             if ($br->save()) {
-                Booking::find($post['bookId'])->update(['book_status' => 1]);
+                Booking::where('book_id', $post['bookId'])->update(['book_status' => 1]);
+                Room::where('room_id', $post['roomId'])->update(['room_status' => 1]);
 
                 return $response
                     ->withStatus(200)
