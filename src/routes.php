@@ -21,6 +21,7 @@ $app->get('/dashboard/or-type/{month}', 'DashboardController:orTypeMonth');
 
 $app->get('/rooms', 'RoomController:getAll');
 $app->get('/rooms/{id}', 'RoomController:getById');
+$app->get('/rooms/building/{id}', 'RoomController:getByBuilding');
 $app->post('/rooms', 'RoomController:store');
 $app->put('/rooms/{id}', 'RoomController:update');
 $app->delete('/rooms/{id}', 'RoomController:delete');

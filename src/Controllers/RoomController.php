@@ -38,6 +38,17 @@ class RoomController extends Controller
                 ->withHeader("Content-Type", "application/json")
                 ->write($data);
     }
+    
+    public function getByBuilding($request, $response, $args)
+    {
+        $rooms = Room::where('building', $args['id'])->get();
+                    
+        $data = json_encode($rooms, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
+
+        return $response->withStatus(200)
+                ->withHeader("Content-Type", "application/json")
+                ->write($data);
+    }
 
     public function store($request, $response, $args)
     {
