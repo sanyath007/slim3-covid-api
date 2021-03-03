@@ -22,4 +22,9 @@ class Room extends Model
     {
         return $this->belongsTo(Building::class, 'building_id', 'building_id');
     }
+    
+    public function bookingRoom()
+    {
+        return $this->belongsTo(BookingRoom::class, 'room_id', 'room_id');
+    }
 }

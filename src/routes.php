@@ -25,6 +25,7 @@ $app->get('/rooms/building/{id}', 'RoomController:getByBuilding');
 $app->post('/rooms', 'RoomController:store');
 $app->put('/rooms/{id}', 'RoomController:update');
 $app->delete('/rooms/{id}', 'RoomController:delete');
+$app->get('/rooms-status', 'RoomController:getRoomsStatus');
 
 $app->get('/room-types', 'RoomTypeController:getAll');
 $app->get('/room-types/{id}', 'RoomTypeController:getById');
