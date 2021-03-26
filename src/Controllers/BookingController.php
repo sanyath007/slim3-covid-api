@@ -140,4 +140,46 @@ class BookingController extends Controller
                     ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
     }
+
+    public function checkout($request, $response, $args)
+    {
+        try {            
+            $br = BookingRoom::where('book_id', $args['bookId'])
+                    ->where('room_id', $args['roomId'])
+                    ->update([
+                        'checkout_date' => date('Y-m-d'),
+                        'checkout_time' => date('h:i:s')
+                    ]);
+
+            if ($br) {
+                Booking::where('book_id', $args['bookId'])->update(['book_status' => 2]);
+                Room::where('room_id', $args['roomId'])->update(['room_status' => 0]);
+
+                return $response
+                    ->withStatus(200)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode([
+                        'status' => 1,
+                        'message' => 'Insertion successfully',
+                        'data' => $br,
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            } else {
+                return $response
+                    ->withStatus(500)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode([
+                        'status' => 0,
+                        'message' => 'Something went wrong!!'
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            }
+        } catch (\Exception $ex) {
+            return $response
+                    ->withStatus(500)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode([
+                        'status' => 0,
+                        'message' => $ex->getMessage()
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+        }
+    }
 }

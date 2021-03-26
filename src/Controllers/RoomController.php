@@ -27,7 +27,7 @@ class RoomController extends Controller
                 ->withHeader("Content-Type", "application/json")
                 ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
-    
+
     public function getById($request, $response, $args)
     {
         $room = Room::where('id', $args['id'])->first();
@@ -38,7 +38,7 @@ class RoomController extends Controller
                 ->withHeader("Content-Type", "application/json")
                 ->write($data);
     }
-    
+
     public function getByBuilding($request, $response, $args)
     {
         $rooms = Room::where(['building' => $args['id'], 'room_status' => 0])
@@ -62,7 +62,7 @@ class RoomController extends Controller
                     ->with('bookingRoom.booking.an', 'bookingRoom.booking.an.patient')
                     ->orderBy('room_no')
                     ->get();
-                    
+
         $data = json_encode([
             'rooms' => $rooms, 
             'status' => $status
@@ -76,7 +76,7 @@ class RoomController extends Controller
     public function store($request, $response, $args)
     {
         $post = (array)$request->getParsedBody();
-        
+
         try {
             // TODO: separate uploads to another method
             /** Upload image */
@@ -104,7 +104,7 @@ class RoomController extends Controller
             $room->floor = $post['floor'];
             // $room->room_img_url = $img_url;
             $room->room_status = 0;
-            
+
             if($room->save()) {
                 $newRoomId = $room->id;
                 $amenities = explode(",", $post['amenities']);
@@ -116,13 +116,13 @@ class RoomController extends Controller
                     $ra->status = 1;
                     $ra->save();
                 }
-    
+
                 $data = [
                     'status' => 1,
                     'message' => 'Insertion successfully!!',
                     'item' => $room
                 ];
-    
+
                 return $response->withStatus(200)
                         ->withHeader("Content-Type", "application/json")
                         ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
@@ -156,14 +156,14 @@ class RoomController extends Controller
         $room->balance = $post['balance'];
         $room->item_type = $post['item_type'];        
         $room->item_group = $post['item_group'];
-        
+
         if($room->save()) {   
             $data = [
                 'status' => 1,
                 'message' => 'Update successfully!!',
                 'item' => $room
             ];
- 
+
             return $response->withStatus(200)
                     ->withHeader("Content-Type", "application/json")
                     ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
