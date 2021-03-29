@@ -57,7 +57,7 @@ class RoomController extends Controller
         $rooms = Room::whereNotIn('room_status', [2,3])
                     ->orderBy('room_no')
                     ->get();
-        $status = Room::where(['room_status' => 1])
+        $usedRooms = Room::where(['room_status' => 1])
                     ->with('bookingRoom', 'bookingRoom.booking')
                     ->with('bookingRoom.booking.an', 'bookingRoom.booking.an.patient')
                     ->orderBy('room_no')
@@ -65,7 +65,7 @@ class RoomController extends Controller
 
         $data = json_encode([
             'rooms' => $rooms, 
-            'status' => $status
+            'usedRooms' => $usedRooms
         ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
         return $response->withStatus(200)
