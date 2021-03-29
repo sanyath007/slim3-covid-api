@@ -149,7 +149,7 @@ class BookingController extends Controller
                     ->where('room_id', $args['roomId'])
                     ->update([
                         'checkout_date' => date('Y-m-d'),
-                        'checkout_time' => date('h:i:s')
+                        'checkout_time' => date('H:i:s')
                     ]);
 
             if ($br) {
