@@ -65,6 +65,7 @@ class BookingController extends Controller
             $booking->room_types = $post['room_types'];
             $booking->user = $post['user'];
             $booking->ward = $post['ward'];
+            $booking->book_status = 0;
 
             if($booking->save()) {
                 return $response

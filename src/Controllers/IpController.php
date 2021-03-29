@@ -19,11 +19,13 @@ class IpController extends Controller
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
         if(count($conditions) > 0) {
-            $model = Ip::with('patient', 'ward')->whereNull('dchdate')
+            $model = Ip::with('patient', 'ward')
+                        ->whereNull('dchdate')
                         ->whereNotIn('ward', ['06','11','12'])
                         ->where($conditions);
         } else {
-            $model = Ip::with('patient', 'ward')->whereNull('dchdate')
+            $model = Ip::with('patient', 'ward')
+                        ->whereNull('dchdate')
                         ->whereNotIn('ward', ['06','11','12']);
         }
 
