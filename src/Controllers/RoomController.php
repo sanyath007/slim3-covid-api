@@ -81,18 +81,18 @@ class RoomController extends Controller
             // TODO: separate uploads to another method
             /** Upload image */
             $link = 'http://'.$request->getServerParam('SERVER_NAME').$request->getServerParam('REDIRECT_URL');
-            // if(preg_match("/^data:image\/(?<extension>(?:png|gif|jpg|jpeg));base64,(?<image>.+)$/", $post['room_img_url'], $matchings))
-            // {
-            //     $img_data = file_get_contents($post['room_img_url']);
-            //     $extension = $matchings['extension'];
-            //     $img_name = uniqid().'.'.$extension;
-            //     $img_url = str_replace('/rooms', '/assets/uploads/'.$img_name, $link);
-            //     $file_to_upload = 'assets/uploads/'.$img_name;
+            if(preg_match("/^data:image\/(?<extension>(?:png|gif|jpg|jpeg));base64,(?<image>.+)$/", $post['room_img_url'], $matchings))
+            {
+                $img_data = file_get_contents($post['room_img_url']);
+                $extension = $matchings['extension'];
+                $img_name = uniqid().'.'.$extension;
+                $img_url = str_replace('/rooms', '/assets/uploads/'.$img_name, $link);
+                $file_to_upload = 'assets/uploads/'.$img_name;
 
-            //     if(file_put_contents($file_to_upload, $img_data)) {
-            //         // echo $img_url;
-            //     }
-            // }
+                if(file_put_contents($file_to_upload, $img_data)) {
+                    // echo $img_url;
+                }
+            }
 
             $room = new Room;
             $room->room_no = $post['room_no'];
@@ -102,7 +102,7 @@ class RoomController extends Controller
             $room->room_group = $post['room_group'];
             $room->building = $post['building'];
             $room->floor = $post['floor'];
-            // $room->room_img_url = $img_url;
+            $room->room_img_url = $img_url;
             $room->room_status = 0;
 
             if($room->save()) {
