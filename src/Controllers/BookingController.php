@@ -44,12 +44,22 @@ class BookingController extends Controller
     
     public function getById($request, $response, $args)
     {
-        $order = Order::where('id', $args['id'])->first();
+        $booking = Booking::where('id', $args['id'])->first();
 
         return $response
                 ->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($order, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write(json_encode($booking, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+    }
+    
+    public function getByAn($request, $response, $args)
+    {
+        $booking = Booking::where('an', $args['an'])->first();
+
+        return $response
+                ->withStatus(200)
+                ->withHeader("Content-Type", "application/json")
+                ->write(json_encode($booking, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
 
     public function store($request, $response, $args)
