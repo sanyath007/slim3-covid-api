@@ -47,6 +47,7 @@ class IpController extends Controller
                 ->with('ward:ward,name')
                 ->with('pttype:pttype,name')
                 ->with('patient.address')
+                ->with('admdoctor:code,name,licenseno')
                 ->first();
 
         return $response->withStatus(200)

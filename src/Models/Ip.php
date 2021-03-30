@@ -28,4 +28,9 @@ class Ip extends Model
     {
         return $this->belongsTo(Pttype::class, 'pttype', 'pttype');
     }
+
+    public function admdoctor()
+    {
+        return $this->belongsTo(Doctor::class, 'admdoctor', 'code');
+    }
 }
