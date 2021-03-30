@@ -23,4 +23,9 @@ class Ip extends Model
     {
         return $this->belongsTo(Ward::class, 'ward', 'ward');
     }
+    
+    public function pttype()
+    {
+        return $this->belongsTo(Pttype::class, 'pttype', 'pttype');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Models\Ip;
+use App\Models\Patient;
 
 class IpController extends Controller
 {
@@ -41,7 +42,12 @@ class IpController extends Controller
     
     public function getById($request, $response, $args)
     {
-        $ip = Ip::where('an', $args['an'])->first();
+        $ip = Ip::where('an', $args['an'])
+                ->with('patient')
+                ->with('ward:ward,name')
+                ->with('pttype:pttype,name')
+                ->with('patient.address')
+                ->first();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
