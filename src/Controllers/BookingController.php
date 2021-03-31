@@ -70,6 +70,8 @@ class BookingController extends Controller
             $booking = new Booking;
             $booking->an = $post['an'];
             $booking->book_date = $post['book_date'];
+            $booking->book_name = $post['book_name'];
+            $booking->book_tel = $post['book_tel'];
             $booking->description = $post['description'];
             $booking->remark = $post['remark'];
             $booking->room_types = $post['room_types'];
