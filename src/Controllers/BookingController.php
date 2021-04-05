@@ -44,7 +44,7 @@ class BookingController extends Controller
     
     public function getById($request, $response, $args)
     {
-        $booking = Booking::where('id', $args['id'])->first();
+        $booking = Booking::where('book_id', $args['id'])->first();
 
         return $response
                 ->withStatus(200)
