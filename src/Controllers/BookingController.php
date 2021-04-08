@@ -116,7 +116,7 @@ class BookingController extends Controller
         try {
             $post = (array)$request->getParsedBody();
 
-            $booking = Booking::where('book_id', $args['id'])->first();
+            $booking = Booking::find($args['id']);
             // $booking->an = $post['an']; // ไม่ให้แก้ไขผู้ป่วย
             $booking->book_date = $post['book_date'];
             $booking->book_name = $post['book_name'];

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Booking extends Model
 {
     protected $table = "bookings";
+    protected $primaryKey = 'book_id';
 
     public function room()
     {
