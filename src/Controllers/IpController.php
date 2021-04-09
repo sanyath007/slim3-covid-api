@@ -23,11 +23,21 @@ class IpController extends Controller
             $model = Ip::with('patient', 'ward')
                         ->whereNull('dchdate')
                         ->whereNotIn('ward', ['06','11','12'])
+                        ->whereNotExists(function($q) {
+                            $q->select(DB::raw(1))
+                                ->from('ipt_newborn')
+                                ->whereColumn('ipt_newborn.an', 'ipt.an');
+                        })
                         ->where($conditions);
         } else {
             $model = Ip::with('patient', 'ward')
                         ->whereNull('dchdate')
-                        ->whereNotIn('ward', ['06','11','12']);
+                        ->whereNotIn('ward', ['06','11','12'])
+                        ->whereNotExists(function($q) {
+                            $q->select(DB::raw(1))
+                                ->from('ipt_newborn')
+                                ->whereColumn('ipt_newborn.an', 'ipt.an');
+                        });
         }
 
         $bookings = paginate($model, 'regdate', 10, $page, $link);
