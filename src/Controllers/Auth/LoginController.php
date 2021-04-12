@@ -23,7 +23,11 @@ class LoginController extends Controller
                 "iat"   => $now->getTimeStamp(),
                 "exp"   => $future->getTimeStamp(),
                 "jti"   => $jti,
-                "sub"   => $user->loginname
+                "sub"   => [
+                    'username'  => $user->loginname,
+                    'name'      => $user->name,
+                    'position'  => $user->entryposition
+                ]
             ];
 
             $secret = getenv("JWT_SECRET");
