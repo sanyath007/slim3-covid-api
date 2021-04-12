@@ -30,23 +30,18 @@ class LoginController extends Controller
                 ]
             ];
 
-            $secret = getenv("JWT_SECRET");
-            
-            $token = JWT::encode($payload, $secret, "HS256");
-
-            $data['token'] = $token;
-            $data['expires'] = $future->getTimeStamp();       
+            $secret = getenv("JWT_SECRET");            
+            $token = JWT::encode($payload, $secret, "HS256");       
 
             return $res->withStatus(201)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+                    ->write(json_encode($token, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
         } else {
-            $data['token'] = '';
-            $data['message'] = '';       
-
             return $res->withStatus(401)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
+                    ->write(json_encode([
+                        'message' => 'Unauthentiction !!'
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT));
         }
     }
 
