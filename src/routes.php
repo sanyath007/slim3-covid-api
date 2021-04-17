@@ -35,9 +35,9 @@ $app->delete('/bed-types/{id}', 'BedTypeController:delete');
 
 $app->get('/wards', 'WardController:getAll');
 $app->get('/wards/{ward}', 'WardController:getById');
-$app->post('/buildings', 'BuildingController:store');
-$app->put('/buildings/{id}', 'BuildingController:update');
-$app->delete('/buildings/{id}', 'BuildingController:delete');
+$app->post('/wards', 'BuildingController:store');
+$app->put('/wards/{id}', 'BuildingController:update');
+$app->delete('/wards/{id}', 'BuildingController:delete');
 
 $app->get('/buildings', 'BuildingController:getAll');
 $app->get('/buildings/{id}', 'BuildingController:getById');
