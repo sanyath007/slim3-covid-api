@@ -21,7 +21,7 @@ $app->get('/dashboard/or-type/{month}', 'DashboardController:orTypeMonth');
 
 $app->get('/beds', 'BedController:getAll');
 $app->get('/beds/{id}', 'BedController:getById');
-$app->get('/beds/ward/{ward}', 'BedController:getByWard');
+$app->get('/beds/ward/{ward}/{status}', 'BedController:getByWard');
 $app->post('/beds', 'BedController:store');
 $app->put('/beds/{id}', 'BedController:update');
 $app->delete('/beds/{id}', 'BedController:delete');

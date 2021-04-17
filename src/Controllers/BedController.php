@@ -40,9 +40,15 @@ class BedController extends Controller
 
     public function getByWard($request, $response, $args)
     {
-        $rooms = Bed::where(['ward' => $args['ward'], 'bed_status' => 0])
+        if($args['status'] == '0') {
+            $rooms = Bed::where(['ward' => $args['ward']])
                     ->orderBy('bed_no')
                     ->get();
+        } else {
+            $rooms = Bed::where(['ward' => $args['ward'], 'bed_status' => 0])
+                    ->orderBy('bed_no')
+                    ->get();
+        }
                     
         $data = json_encode($rooms, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
