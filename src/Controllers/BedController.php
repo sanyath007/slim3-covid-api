@@ -6,6 +6,7 @@ use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use Respect\Validation\Validator as v;
 use App\Models\Bed;
+use App\Models\Registration;
 
 class BedController extends Controller
 {
@@ -57,20 +58,14 @@ class BedController extends Controller
                 ->write($data);
     }
     
-    public function getRoomsStatus($request, $response, $args)
+    public function getBedUsed($request, $response, $args)
     {
-        $rooms = Bed::whereNotIn('bed_status', [2,3])
-                    ->orderBy('bed_no')
-                    ->get();
-        $usedBeds = Bed::where(['bed_status' => 1])
-                    ->with('bookingRoom', 'bookingRoom.booking')
-                    ->with('bookingRoom.booking.an', 'bookingRoom.booking.an.patient')
-                    ->orderBy('bed_no')
-                    ->get();
+        $used = Registration::with('patient', 'bed')
+                    ->where(['bed' => $args['bed']])
+                    ->first();
 
         $data = json_encode([
-            'beds' => $rooms, 
-            'usedBeds' => $usedBeds
+            'used' => $used,
         ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
         return $response->withStatus(200)

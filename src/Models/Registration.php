@@ -12,4 +12,9 @@ class Registration extends Model
     {
         return $this->belongsTo(Patient::class, 'hn', 'hn');
     }
+
+    public function bed()
+    {
+        return $this->belongsTo(Bed::class, 'bed', 'bed_id');
+    }
 }

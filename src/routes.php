@@ -25,7 +25,7 @@ $app->get('/beds/ward/{ward}/{status}', 'BedController:getByWard');
 $app->post('/beds', 'BedController:store');
 $app->put('/beds/{id}', 'BedController:update');
 $app->delete('/beds/{id}', 'BedController:delete');
-$app->get('/beds-status', 'BedController:getBedStatus');
+$app->get('/beds/{bed}/used', 'BedController:getBedUsed');
 
 $app->get('/bed-types', 'BedTypeController:getAll');
 $app->get('/bed-types/{id}', 'BedTypeController:getById');
@@ -59,7 +59,6 @@ $app->post('/registrations', 'RegistrationController:store');
 $app->put('/registrations/{id}', 'RegistrationController:update');
 $app->put('/registrations/cancel/{id}', 'RegistrationController:cancel');
 $app->delete('/registrations/{id}', 'RegistrationController:delete');
-$app->post('/registrations/checkin', 'RegistrationController:checkin');
 $app->put('/registrations/checkout/{bookId}/{roomId}', 'RegistrationController:checkout');
 
 /** Routes to person db */
