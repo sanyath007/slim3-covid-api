@@ -79,32 +79,28 @@ $container['DashboardController'] = function($c) {
     return new App\Controllers\DashboardController($c);
 };
 
-$container['OrderController'] = function($c) {
-    return new App\Controllers\OrderController($c);
+$container['RegistrationController'] = function($c) {
+    return new App\Controllers\RegistrationController($c);
 };
 
-$container['RoomController'] = function($c) {
-    return new App\Controllers\RoomController($c);
+$container['BedController'] = function($c) {
+    return new App\Controllers\BedController($c);
 };
 
-$container['RoomTypeController'] = function($c) {
-    return new App\Controllers\RoomTypeController($c);
+$container['BedTypeController'] = function($c) {
+    return new App\Controllers\BedTypeController($c);
 };
 
-$container['RoomGroupController'] = function($c) {
-    return new App\Controllers\RoomGroupController($c);
+$container['PatientController'] = function($c) {
+    return new App\Controllers\PatientController($c);
+};
+
+$container['WardController'] = function($c) {
+    return new App\Controllers\WardController($c);
 };
 
 $container['BuildingController'] = function($c) {
     return new App\Controllers\BuildingController($c);
-};
-
-$container['AmenityController'] = function($c) {
-    return new App\Controllers\AmenityController($c);
-};
-
-$container['BookingController'] = function($c) {
-    return new App\Controllers\BookingController($c);
 };
 
 /** Person Controllers */
@@ -117,14 +113,6 @@ $container['DeptController'] = function($c) {
 };
 
 /** Hosxp Controllers */
-$container['PatientController'] = function($c) {
-    return new App\Controllers\PatientController($c);
-};
-
-$container['WardController'] = function($c) {
-    return new App\Controllers\WardController($c);
-};
-
 $container['WardMoveController'] = function($c) {
     return new App\Controllers\WardMoveController($c);
 };

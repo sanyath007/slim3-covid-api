@@ -4,39 +4,39 @@ namespace App\Controllers;
 
 use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
-use App\Models\Amenity;
+use App\Models\BedType;
 
-class AmenityController extends Controller
+class BedTypeController extends Controller
 {
     public function getAll($request, $response, $args)
     {
-        $amenities = Amenity::all();
+        $type = BedType::all();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($amenities, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write(json_encode($type, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
     
     public function getById($request, $response, $args)
     {
-        $amenity = Amenity::where('amenity_id', $args['id'])->first();
+        $type = BedType::where('bed_type_id', $args['id'])->first();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($amenity, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write(json_encode($type, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
 
     public function store($request, $response, $args)
     {
         $post = (array)$request->getParsedBody();
 
-        $amenity = new Amenity;
-        $amenity->amenity_desc = $post['unit_name'];
+        $type = new BedType;
+        $type->bed_type_name = $post['name'];
         
-        if($amenity->save()) {
+        if($type->save()) {
             return $response->withStatus(200)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($amenity, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                    ->write(json_encode($type, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }                    
     }
 
@@ -44,24 +44,24 @@ class AmenityController extends Controller
     {
         $post = (array)$request->getParsedBody();
 
-        $amenity = Amenity::where('amenity_id', $args['id'])->first();
-        $amenity->amenity_desc = $post['unit_name'];
-        
-        if($amenity->save()) {
+        $type = BedType::where('bed_type_id', $args['id'])->first();
+        $type->bed_type_name = $post['name'];
+
+        if($type->save()) {
             return $response->withStatus(200)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($amenity, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                    ->write(json_encode($type, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
     }
 
     public function delete($request, $response, $args)
     {
-        $amenity = Amenity::where('amenity_id', $args['id'])->first();
+        $type = BedType::where('bed_type_id', $args['id'])->first();
         
-        if($amenity->delete()) {    
+        if($type->delete()) {    
             return $response->withStatus(200)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($amenity, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                    ->write(json_encode($type, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
     }
 }

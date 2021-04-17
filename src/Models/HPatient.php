@@ -4,8 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AnStat extends Model
+class HPatient extends Model
 {
+    use \Awobaz\Compoships\Compoships;
+    
     protected $connection = "hos";
-    protected $table = "an_stat";
+    protected $table = "patient";
 }

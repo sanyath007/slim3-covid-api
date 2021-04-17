@@ -5,10 +5,9 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use Respect\Validation\Validator as v;
-use App\Models\Room;
-use App\Models\RoomAmenities;
+use App\Models\Bed;
 
-class RoomController extends Controller
+class BedController extends Controller
 {
     public function getAll($request, $response, $args)
     {
@@ -16,10 +15,10 @@ class RoomController extends Controller
 
         if ($page) {
             $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
-            $data = paginate(Room::with('roomType', 'roomGroup', 'building')->orderBy('room_no'), 10, $page, $link);
+            $data = paginate(Bed::with('bedType', 'ward')->orderBy('bed_no'), 10, $page, $link);
         } else {
             $data = [
-                'items' => Room::with('roomType', 'roomGroup', 'building')->orderBy('room_no')->get()
+                'items' => Bed::with('bedType', 'ward')->orderBy('bed_no')->get()
             ];
         }
 
@@ -30,7 +29,7 @@ class RoomController extends Controller
 
     public function getById($request, $response, $args)
     {
-        $room = Room::where('id', $args['id'])->first();
+        $room = Bed::where('bed_id', $args['id'])->first();
                     
         $data = json_encode($room, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
@@ -39,10 +38,10 @@ class RoomController extends Controller
                 ->write($data);
     }
 
-    public function getByBuilding($request, $response, $args)
+    public function getByWard($request, $response, $args)
     {
-        $rooms = Room::where(['building' => $args['id'], 'room_status' => 0])
-                    ->orderBy('room_no')
+        $rooms = Bed::where(['ward' => $args['ward'], 'bed_status' => 0])
+                    ->orderBy('bed_no')
                     ->get();
                     
         $data = json_encode($rooms, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
@@ -54,18 +53,18 @@ class RoomController extends Controller
     
     public function getRoomsStatus($request, $response, $args)
     {
-        $rooms = Room::whereNotIn('room_status', [2,3])
-                    ->orderBy('room_no')
+        $rooms = Bed::whereNotIn('bed_status', [2,3])
+                    ->orderBy('bed_no')
                     ->get();
-        $usedRooms = Room::where(['room_status' => 1])
+        $usedBeds = Bed::where(['bed_status' => 1])
                     ->with('bookingRoom', 'bookingRoom.booking')
                     ->with('bookingRoom.booking.an', 'bookingRoom.booking.an.patient')
-                    ->orderBy('room_no')
+                    ->orderBy('bed_no')
                     ->get();
 
         $data = json_encode([
-            'rooms' => $rooms, 
-            'usedRooms' => $usedRooms
+            'beds' => $rooms, 
+            'usedBeds' => $usedBeds
         ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
         return $response->withStatus(200)
@@ -80,21 +79,21 @@ class RoomController extends Controller
         try {
             // TODO: separate uploads to another method
             /** Upload image */
-            $link = 'http://'.$request->getServerParam('SERVER_NAME').$request->getServerParam('REDIRECT_URL');
-            if(preg_match("/^data:image\/(?<extension>(?:png|gif|jpg|jpeg));base64,(?<image>.+)$/", $post['room_img_url'], $matchings))
-            {
-                $img_data = file_get_contents($post['room_img_url']);
-                $extension = $matchings['extension'];
-                $img_name = uniqid().'.'.$extension;
-                $img_url = str_replace('/rooms', '/assets/uploads/'.$img_name, $link);
-                $file_to_upload = 'assets/uploads/'.$img_name;
+            // $link = 'http://'.$request->getServerParam('SERVER_NAME').$request->getServerParam('REDIRECT_URL');
+            // if(preg_match("/^data:image\/(?<extension>(?:png|gif|jpg|jpeg));base64,(?<image>.+)$/", $post['bed_img_url'], $matchings))
+            // {
+            //     $img_data = file_get_contents($post['bed_img_url']);
+            //     $extension = $matchings['extension'];
+            //     $img_name = uniqid().'.'.$extension;
+            //     $img_url = str_replace('/rooms', '/assets/uploads/'.$img_name, $link);
+            //     $file_to_upload = 'assets/uploads/'.$img_name;
 
-                if(file_put_contents($file_to_upload, $img_data)) {
-                    // echo $img_url;
-                }
-            }
+            //     if(file_put_contents($file_to_upload, $img_data)) {
+            //         // echo $img_url;
+            //     }
+            // }
 
-            $room = new Room;
+            $room = new Bed;
             $room->room_no = $post['room_no'];
             $room->room_name = $post['room_name'];
             $room->description = $post['description'];
@@ -129,7 +128,7 @@ class RoomController extends Controller
             } // end if
         } catch (\Throwable $th) {
             /** Delete new room if error occurs */
-            Room::find($newRoomId)->delete();
+            Bed::find($newRoomId)->delete();
             
             /** And set data to client with http status 500 */
             $data = [
@@ -147,7 +146,7 @@ class RoomController extends Controller
     {
         $post = (array)$request->getParsedBody();
 
-        $room = Room::where('id', $args['id'])->first();
+        $room = Bed::where('id', $args['id'])->first();
         $room->name = $post['name'];
         $room->unit = $post['unit'];
         $room->cost = $post['cost'];
@@ -172,7 +171,7 @@ class RoomController extends Controller
 
     public function delete($request, $response, $args)
     {
-        $room = Room::where('id', $args['id'])->first();
+        $room = Bed::where('id', $args['id'])->first();
         
         if($room->delete()) {
             return $response->withStatus(200)

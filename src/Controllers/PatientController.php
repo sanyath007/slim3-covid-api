@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Models\Patient;
+use App\Models\Registration;
 
 class PatientController extends Controller
 {
@@ -13,11 +14,11 @@ class PatientController extends Controller
         $page = (int)$request->getQueryParam('page');
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
-        $model = Patient::where('death', '<>', 'Y');
+        $model = Registration::with('patient')->whereNull('dch_date');
 
-        $bookings = paginate($model, 'hn', 10, $page, $link);
+        $patients = paginate($model, 'hn', 10, $page, $link);
         
-        $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
+        $data = json_encode($patients, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
         return $response
                 ->withStatus(200)
@@ -27,26 +28,41 @@ class PatientController extends Controller
     
     public function getById($request, $response, $args)
     {
-        $patient = Patient::where('hn', $args['hn'])->first();
+        $patient = Registration::where('hn', $args['hn'])->first();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
                 ->write(json_encode($patient, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
 
-    // public function store($request, $response, $args)
-    // {
-    //     $post = (array)$request->getParsedBody();
+    public function store($request, $response, $args)
+    {
+        $post = (array)$request->getParsedBody();
 
-    //     $Patient = new Patient;
-    //     $Patient->name = $post['Patient_name'];
-        
-    //     if($Patient->save()) {
-    //         return $response->withStatus(200)
-    //                 ->withHeader("Content-Type", "application/json")
-    //                 ->write(json_encode($Patient, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-    //     }                    
-    // }
+        $patient = new Patient;
+        $patient->hn = $post['hn'];
+        $patient->name = $post['name'];
+        $patient->sex = $post['sex'];
+        $patient->age_y = $post['age_y'];
+        $patient->tel = $post['tel'];
+
+        if($patient->save()) {
+            $reg = new Registration;
+            $reg->an = $post['an'];
+            $reg->hn = $post['hn'];
+            $reg->reg_date = $post['reg_date'];
+            $reg->lab_date = $post['lab_date'];
+            $reg->lab_result = $post['lab_result'];
+            $reg->dx = $post['dx'];
+            $reg->symptom = $post['symptom'];
+            $reg->remark = $post['remark'];
+            $reg->save();
+
+            return $response->withStatus(200)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode($patient, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+        }                    
+    }
 
     // public function update($request, $response, $args)
     // {

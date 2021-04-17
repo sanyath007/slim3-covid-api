@@ -6,11 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ward extends Model
 {
-    protected $connection = "hos";
-    protected $table = "ward";
+    protected $table = "wards";
 
-    public function booking()
+    public function bed()
     {
-        return $this->hasMany(Booking::class, 'ward', 'ward_id');
+        return $this->hasMany(Bed::class, 'ward', 'ward_id');
     }
 }

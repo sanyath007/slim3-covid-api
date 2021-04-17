@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Models\Ip;
-use App\Models\Patient;
+use App\Models\HPatient;
 
 class IpController extends Controller
 {
@@ -20,24 +20,26 @@ class IpController extends Controller
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
         if(count($conditions) > 0) {
-            $model = Ip::with('patient', 'ward')
+            $model = Ip::with('hpatient', 'hward')
                         ->whereNull('dchdate')
-                        ->whereNotIn('ward', ['06','11','12'])
+                        ->whereIn('ward', ['00','05','06'])
                         ->whereNotExists(function($q) {
                             $q->select(DB::raw(1))
                                 ->from('ipt_newborn')
                                 ->whereColumn('ipt_newborn.an', 'ipt.an');
                         })
-                        ->where($conditions);
+                        ->where($conditions)
+                        ->orderBy('ward');
         } else {
-            $model = Ip::with('patient', 'ward')
+            $model = Ip::with('hpatient', 'hward')
                         ->whereNull('dchdate')
-                        ->whereNotIn('ward', ['06','11','12'])
+                        ->whereIn('ward', ['00','05','06'])
                         ->whereNotExists(function($q) {
                             $q->select(DB::raw(1))
                                 ->from('ipt_newborn')
                                 ->whereColumn('ipt_newborn.an', 'ipt.an');
-                        });
+                        })
+                        ->orderBy('ward');
         }
 
         $bookings = paginate($model, 'regdate', 10, $page, $link);

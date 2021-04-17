@@ -9,19 +9,14 @@ class Ip extends Model
     protected $connection = "hos";
     protected $table = "ipt";
 
-    public function booking()
+    public function hpatient()
     {
-        return $this->hasMany(Booking::class, 'an', 'an');
-    }
-
-    public function patient()
-    {
-        return $this->belongsTo(Patient::class, 'hn', 'hn');
+        return $this->belongsTo(HPatient::class, 'hn', 'hn');
     }
     
-    public function ward()
+    public function hward()
     {
-        return $this->belongsTo(Ward::class, 'ward', 'ward');
+        return $this->belongsTo(HWard::class, 'ward', 'ward');
     }
     
     public function pttype()

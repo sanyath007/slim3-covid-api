@@ -19,7 +19,7 @@ class WardController extends Controller
     
     public function getById($request, $response, $args)
     {
-        $ward = Ward::where('ward', $args['id'])->first();
+        $ward = Ward::where('ward_id', $args['id'])->first();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")

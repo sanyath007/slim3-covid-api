@@ -7,7 +7,7 @@ $app->options('/{routes:.+}', function($request, $response, $args) {
 $app->add(function ($req, $res, $next) {
     $response = $next($req, $res);
     return $response
-            ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3001')
+            ->withHeader('Access-Control-Allow-Origin', 'http://localhost:3002')
             ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
@@ -19,25 +19,25 @@ $app->post('/login', 'LoginController:login')->setName('login');
 $app->get('/dashboard/or-visit/{month}', 'DashboardController:orVisitMonth');
 $app->get('/dashboard/or-type/{month}', 'DashboardController:orTypeMonth');
 
-$app->get('/rooms', 'RoomController:getAll');
-$app->get('/rooms/{id}', 'RoomController:getById');
-$app->get('/rooms/building/{id}', 'RoomController:getByBuilding');
-$app->post('/rooms', 'RoomController:store');
-$app->put('/rooms/{id}', 'RoomController:update');
-$app->delete('/rooms/{id}', 'RoomController:delete');
-$app->get('/rooms-status', 'RoomController:getRoomsStatus');
+$app->get('/beds', 'BedController:getAll');
+$app->get('/beds/{id}', 'BedController:getById');
+$app->get('/beds/ward/{ward}', 'BedController:getByWard');
+$app->post('/beds', 'BedController:store');
+$app->put('/beds/{id}', 'BedController:update');
+$app->delete('/beds/{id}', 'BedController:delete');
+$app->get('/beds-status', 'BedController:getBedStatus');
 
-$app->get('/room-types', 'RoomTypeController:getAll');
-$app->get('/room-types/{id}', 'RoomTypeController:getById');
-$app->post('/room-types', 'RoomTypeController:store');
-$app->put('/room-types/{id}', 'RoomTypeController:update');
-$app->delete('/room-types/{id}', 'RoomTypeController:delete');
+$app->get('/bed-types', 'BedTypeController:getAll');
+$app->get('/bed-types/{id}', 'BedTypeController:getById');
+$app->post('/bed-types', 'BedTypeController:store');
+$app->put('/bed-types/{id}', 'BedTypeController:update');
+$app->delete('/bed-types/{id}', 'BedTypeController:delete');
 
-$app->get('/room-groups', 'RoomGroupController:getAll');
-$app->get('/room-groups/{id}', 'RoomGroupController:getById');
-$app->post('/room-groups', 'RoomGroupController:store');
-$app->put('/room-groups/{id}', 'RoomGroupController:update');
-$app->delete('/room-groups/{id}', 'RoomGroupController:delete');
+$app->get('/wards', 'WardController:getAll');
+$app->get('/wards/{ward}', 'WardController:getById');
+$app->post('/buildings', 'BuildingController:store');
+$app->put('/buildings/{id}', 'BuildingController:update');
+$app->delete('/buildings/{id}', 'BuildingController:delete');
 
 $app->get('/buildings', 'BuildingController:getAll');
 $app->get('/buildings/{id}', 'BuildingController:getById');
@@ -45,22 +45,22 @@ $app->post('/buildings', 'BuildingController:store');
 $app->put('/buildings/{id}', 'BuildingController:update');
 $app->delete('/buildings/{id}', 'BuildingController:delete');
 
-$app->get('/amenities', 'AmenityController:getAll');
-$app->get('/amenities/{id}', 'AmenityController:getById');
-$app->post('/amenities', 'AmenityController:store');
-$app->put('/amenities/{id}', 'AmenityController:update');
-$app->delete('/amenities/{id}', 'AmenityController:delete');
+$app->get('/patients', 'PatientController:getAll');
+$app->get('/patients/{hn}', 'PatientController:getById');
+$app->post('/patients', 'PatientController:store');
+$app->put('/patients/{id}', 'PatientController:update');
+$app->delete('/patients/{id}', 'PatientController:delete');
 
-$app->get('/bookings', 'BookingController:getAll');
-$app->get('/bookings/{id}', 'BookingController:getById');
-$app->get('/bookings/an/{an}', 'BookingController:getByAn');
-$app->get('/bookings/last/order-no', 'BookingController:generateOrderNo');
-$app->post('/bookings', 'BookingController:store');
-$app->put('/bookings/{id}', 'BookingController:update');
-$app->put('/bookings/cancel/{id}', 'BookingController:cancel');
-$app->delete('/bookings/{id}', 'BookingController:delete');
-$app->post('/bookings/checkin', 'BookingController:checkin');
-$app->put('/bookings/checkout/{bookId}/{roomId}', 'BookingController:checkout');
+$app->get('/registrations', 'RegistrationController:getAll');
+$app->get('/registrations/{id}', 'RegistrationController:getById');
+$app->get('/registrations/an/{an}', 'RegistrationController:getByAn');
+$app->get('/registrations/last/order-no', 'RegistrationController:generateOrderNo');
+$app->post('/registrations', 'RegistrationController:store');
+$app->put('/registrations/{id}', 'RegistrationController:update');
+$app->put('/registrations/cancel/{id}', 'RegistrationController:cancel');
+$app->delete('/registrations/{id}', 'RegistrationController:delete');
+$app->post('/registrations/checkin', 'RegistrationController:checkin');
+$app->put('/registrations/checkout/{bookId}/{roomId}', 'RegistrationController:checkout');
 
 /** Routes to person db */
 $app->get('/depts', 'DeptController:getAll');
@@ -72,12 +72,6 @@ $app->get('/staffs/{id}', 'StaffController:getById');
 /** Routes to hosxp db */
 $app->get('/ips', 'IpController:getAll');
 $app->get('/ips/{an}', 'IpController:getById');
-
-$app->get('/wards', 'WardController:getAll');
-$app->get('/wards/{ward}', 'WardController:getById');
-
-$app->get('/patients', 'PatientController:getAll');
-$app->get('/patients/{hn}', 'PatientController:getById');
 
 $app->group('/api', function(Slim\App $app) { 
     $app->get('/users', 'UserController:index');
