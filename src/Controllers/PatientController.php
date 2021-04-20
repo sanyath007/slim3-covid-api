@@ -15,7 +15,7 @@ class PatientController extends Controller
         $page = (int)$request->getQueryParam('page');
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
-        $model = Registration::with('patient')->whereNull('dch_date');
+        $model = Registration::with('patient', 'bed')->whereNull('dch_date');
 
         $patients = paginate($model, 'reg_date', 10, $page, $link);
         
