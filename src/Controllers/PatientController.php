@@ -17,7 +17,7 @@ class PatientController extends Controller
 
         $model = Registration::with('patient')->whereNull('dch_date');
 
-        $patients = paginate($model, 'hn', 10, $page, $link);
+        $patients = paginate($model, 'reg_date', 10, $page, $link);
         
         $data = json_encode($patients, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
