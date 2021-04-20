@@ -29,9 +29,10 @@ class RegistrationController extends Controller
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
         $model = Registration::where('book_status', '=', 0)
-                    ->with('an','an.patient','an.ward','room','user');
+                    ->with('an','an.patient','an.ward','room','user')
+                    ->orderBy('book_id');
 
-        $bookings = paginate($model, 'book_id', 10, $page, $link);
+        $bookings = paginate($model, 10, $page, $link);
         
         $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 

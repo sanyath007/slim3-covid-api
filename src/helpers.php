@@ -1,6 +1,6 @@
 <?php
 
-function paginate($model, $orderBy, $recordPerPage, $currenPage, $link)
+function paginate($model, $recordPerPage, $currenPage, $link)
 {        
     $count = $model->count();
     
@@ -14,7 +14,6 @@ function paginate($model, $orderBy, $recordPerPage, $currenPage, $link)
 
     $items = $model->skip($offset)
                 ->take($perPage)
-                ->orderBy($orderBy)
                 ->get();
 
     return [

@@ -15,9 +15,12 @@ class PatientController extends Controller
         $page = (int)$request->getQueryParam('page');
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
-        $model = Registration::with('patient', 'bed')->whereNull('dch_date');
+        $model = Registration::with('patient', 'bed')
+                    ->whereNull('dch_date')
+                    ->orderBy('ward')
+                    ->orderBy('reg_date');
 
-        $patients = paginate($model, 'reg_date', 10, $page, $link);
+        $patients = paginate($model, 10, $page, $link);
         
         $data = json_encode($patients, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 

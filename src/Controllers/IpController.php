@@ -49,7 +49,7 @@ class IpController extends Controller
                         ->orderBy('regdate');
         }
 
-        $bookings = paginate($model, 'regdate', 10, $page, $link);
+        $bookings = paginate($model, 10, $page, $link);
 
         $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
