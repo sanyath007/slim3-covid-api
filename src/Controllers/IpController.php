@@ -6,6 +6,7 @@ use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
 use App\Models\Ip;
 use App\Models\HPatient;
+use App\Models\Registration;
 
 class IpController extends Controller
 {
@@ -19,6 +20,8 @@ class IpController extends Controller
 
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
+        $regists = Registration::pluck('an')->all();
+
         if(count($conditions) > 0) {
             $model = Ip::with('hpatient', 'hward')
                         ->whereNull('dchdate')
@@ -28,8 +31,10 @@ class IpController extends Controller
                                 ->from('ipt_newborn')
                                 ->whereColumn('ipt_newborn.an', 'ipt.an');
                         })
+                        ->whereNotIn('an', $regists)
                         ->where($conditions)
-                        ->orderBy('ward');
+                        ->orderBy('ward')
+                        ->orderBy('regdate');
         } else {
             $model = Ip::with('hpatient', 'hward')
                         ->whereNull('dchdate')
@@ -39,11 +44,13 @@ class IpController extends Controller
                                 ->from('ipt_newborn')
                                 ->whereColumn('ipt_newborn.an', 'ipt.an');
                         })
-                        ->orderBy('ward');
+                        ->whereNotIn('an', $regists)
+                        ->orderBy('ward')
+                        ->orderBy('regdate');
         }
 
         $bookings = paginate($model, 'regdate', 10, $page, $link);
-        
+
         $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
         return $response

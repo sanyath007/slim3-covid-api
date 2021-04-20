@@ -28,4 +28,9 @@ class Ip extends Model
     {
         return $this->belongsTo(Doctor::class, 'admdoctor', 'code');
     }
+    
+    public function regis()
+    {
+        return $this->setConnection('default')->belongsTo(Registration::class, 'an', 'an');
+    }
 }

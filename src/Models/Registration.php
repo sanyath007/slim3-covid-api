@@ -17,4 +17,9 @@ class Registration extends Model
     {
         return $this->belongsTo(Bed::class, 'bed', 'bed_id');
     }
+    
+    public function ip()
+    {
+        return $this->setConnection('hos')->hasOne(Ip::class, 'an', 'an');
+    }
 }
