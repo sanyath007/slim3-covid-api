@@ -13,12 +13,16 @@ class PatientController extends Controller
     public function getAll($request, $response, $args)
     {
         $page = (int)$request->getQueryParam('page');
+        $dchdate = (int)$request->getQueryParam('dchdate') == '0' ? false : true;
+
         $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
 
         $model = Registration::with('patient', 'bed')
-                    ->whereNull('dch_date')
+                    ->when($dchdate, function($q) {
+                        $q->whereNull('dch_date');
+                    })
                     ->orderBy('ward')
-                    ->orderBy('reg_date');
+                    ->orderBy('reg_date', 'desc');
 
         $patients = paginate($model, 10, $page, $link);
         
