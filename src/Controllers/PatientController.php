@@ -60,8 +60,8 @@ class PatientController extends Controller
                 $reg->reg_date = $post['reg_date'];
                 $reg->ward = $post['ward'];
                 $reg->bed = $post['bed'];
-                $reg->lab_date = $post['lab_date'];
-                $reg->lab_result = $post['lab_result'];
+                // $reg->lab_date = $post['lab_date'];
+                // $reg->lab_result = $post['lab_result'];
                 $reg->dx = $post['dx'];
                 $reg->symptom = $post['symptom'];
                 $reg->reg_from = $post['reg_from'];
