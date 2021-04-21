@@ -225,24 +225,20 @@ class RegistrationController extends Controller
     public function discharge($request, $response, $args)
     {
         try {            
-            $br = BookingRoom::where('book_id', $args['bookId'])
-                    ->where('room_id', $args['roomId'])
-                    ->update([
-                        'checkout_date' => date('Y-m-d'),
-                        'checkout_time' => date('H:i:s')
-                    ]);
+            $reg = Registration::with('patient','bed')->find($args['id']);
+            $reg->dch_date = date('Y-m-d');
+            $reg->dch_time = date('H:i:s');
 
-            if ($br) {
-                Booking::where('book_id', $args['bookId'])->update(['book_status' => 2]);
-                Room::where('room_id', $args['roomId'])->update(['room_status' => 0]);
+            if ($reg->save()) {
+                Bed::where('bed_id', $reg->bed)->update(['bed_status' => 0]);
 
                 return $response
                     ->withStatus(200)
                     ->withHeader("Content-Type", "application/json")
                     ->write(json_encode([
                         'status' => 1,
-                        'message' => 'Insertion successfully',
-                        'data' => $br,
+                        'message' => 'Discharging successfully',
+                        'data' => $reg,
                     ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
             } else {
                 return $response

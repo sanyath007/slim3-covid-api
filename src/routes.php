@@ -59,7 +59,7 @@ $app->post('/registrations', 'RegistrationController:store');
 $app->put('/registrations/{id}', 'RegistrationController:update');
 $app->put('/registrations/cancel/{id}', 'RegistrationController:cancel');
 $app->delete('/registrations/{id}', 'RegistrationController:delete');
-$app->put('/registrations/checkout/{bookId}/{roomId}', 'RegistrationController:checkout');
+$app->put('/registrations/discharge/{id}', 'RegistrationController:discharge');
 
 /** Routes to person db */
 $app->get('/depts', 'DeptController:getAll');
