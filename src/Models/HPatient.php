@@ -10,4 +10,13 @@ class HPatient extends Model
     
     protected $connection = "hos";
     protected $table = "patient";
+    
+    public function haddress()
+    {
+        return $this->hasOne(
+            HPatientAddress::class,
+            ['chwpart', 'amppart', 'tmbpart'],
+            ['chwpart', 'amppart', 'tmbpart']
+        );
+    }
 }

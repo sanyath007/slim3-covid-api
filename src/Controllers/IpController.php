@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\Controller;
 use Illuminate\Database\Capsule\Manager as DB;
-use App\Models\Ip;
+use App\Models\HIp;
 use App\Models\HPatient;
 use App\Models\Registration;
 
@@ -23,8 +23,8 @@ class IpController extends Controller
         $regists = Registration::pluck('an')->all();
 
         if(count($conditions) > 0) {
-            $model = Ip::with('hpatient', 'hward')
-                        ->whereNull('dchdate')
+            $model = HIp::with('hpatient', 'hward', 'hanstat')
+                        // ->whereNull('dchdate')
                         ->whereIn('ward', ['00','05','06'])
                         ->whereNotExists(function($q) {
                             $q->select(DB::raw(1))
@@ -36,8 +36,8 @@ class IpController extends Controller
                         ->orderBy('ward')
                         ->orderBy('regdate');
         } else {
-            $model = Ip::with('hpatient', 'hward')
-                        ->whereNull('dchdate')
+            $model = HIp::with('hpatient', 'hward', 'hanstat')
+                        // ->whereNull('dchdate')
                         ->whereIn('ward', ['00','05','06'])
                         ->whereNotExists(function($q) {
                             $q->select(DB::raw(1))
@@ -61,12 +61,13 @@ class IpController extends Controller
     
     public function getById($request, $response, $args)
     {
-        $ip = Ip::where('an', $args['an'])
-                ->with('patient')
-                ->with('ward:ward,name')
-                ->with('pttype:pttype,name')
-                ->with('patient.address')
-                ->with('admdoctor:code,name,licenseno')
+        $ip = HIp::where('an', $args['an'])
+                ->with('hpatient')
+                ->with('hward:ward,name')
+                ->with('hanstat')
+                // ->with('hpttype:pttype,name')
+                // ->with('patient.address')
+                // ->with('admdoctor:code,name,licenseno')
                 ->first();
 
         return $response->withStatus(200)
