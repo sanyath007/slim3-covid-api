@@ -224,10 +224,14 @@ class RegistrationController extends Controller
 
     public function discharge($request, $response, $args)
     {
-        try {            
+        try {
+            $post = (array)$request->getParsedBody();
+
             $reg = Registration::with('patient','bed')->find($args['id']);
-            $reg->dch_date = date('Y-m-d');
-            $reg->dch_time = date('H:i:s');
+            $reg->dch_date = $post['dch_date'];
+            $reg->dch_time = $post['dch_time'];
+            $reg->dch_type = $post['dch_type'];
+            $reg->adm_day = $post['adm_day'];
 
             if ($reg->save()) {
                 Bed::where('bed_id', $reg->bed)->update(['bed_status' => 0]);
