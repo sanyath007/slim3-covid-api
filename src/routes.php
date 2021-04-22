@@ -60,6 +60,7 @@ $app->put('/registrations/{id}', 'RegistrationController:update');
 $app->put('/registrations/cancel/{id}', 'RegistrationController:cancel');
 $app->delete('/registrations/{id}', 'RegistrationController:delete');
 $app->put('/registrations/discharge/{id}', 'RegistrationController:discharge');
+$app->put('/registrations/lab-result/{id}', 'RegistrationController:labResult');
 
 /** Routes to person db */
 $app->get('/depts', 'DeptController:getAll');
