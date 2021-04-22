@@ -32,9 +32,9 @@ class RegistrationController extends Controller
                     ->with('an','an.patient','an.ward','room','user')
                     ->orderBy('book_id');
 
-        $bookings = paginate($model, 10, $page, $link);
+        $reg = paginate($model, 10, $page, $link);
         
-        $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
+        $data = json_encode($reg, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
         return $response
                 ->withStatus(200)
@@ -44,24 +44,24 @@ class RegistrationController extends Controller
     
     public function getById($request, $response, $args)
     {
-        $booking = Registration::where('book_id', $args['id'])
-                            ->with('an','an.patient','an.ward','room','user')
+        $reg = Registration::where('id', $args['id'])
+                            ->with('patient','bed')
                             ->first();
 
         return $response
                 ->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($booking, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write(json_encode($reg, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
     
     public function getByAn($request, $response, $args)
     {
-        $booking = Registration::where('an', $args['an'])->first();
+        $reg = Registration::where('an', $args['an'])->first();
 
         return $response
                 ->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
-                ->write(json_encode($booking, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                ->write(json_encode($reg, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
 
     public function store($request, $response, $args)
