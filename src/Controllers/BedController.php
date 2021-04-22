@@ -62,6 +62,7 @@ class BedController extends Controller
     {
         $used = Registration::with('patient', 'bed')
                     ->where(['bed' => $args['bed']])
+                    ->whereNull('dch_date')
                     ->first();
 
         $data = json_encode([
