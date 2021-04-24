@@ -15,8 +15,6 @@ class PatientController extends Controller
         $page = (int)$request->getQueryParam('page');
         $dchdate = (int)$request->getQueryParam('dchdate') == '0' ? false : true;
 
-        $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
-
         $model = Registration::with('patient', 'bed')
                     ->when($dchdate, function($q) {
                         $q->whereNull('dch_date');
@@ -24,7 +22,7 @@ class PatientController extends Controller
                     ->orderBy('ward')
                     ->orderBy('reg_date', 'desc');
 
-        $patients = paginate($model, 10, $page, $link);
+        $patients = paginate($model, 10, $page, $request);
         
         $data = json_encode($patients, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 

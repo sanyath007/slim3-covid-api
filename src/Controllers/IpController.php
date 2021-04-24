@@ -18,8 +18,6 @@ class IpController extends Controller
 
         if(!empty($ward)) array_push($conditions, ['ward' => $ward]);
 
-        $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
-
         $regists = Registration::pluck('an')->all();
 
         if(count($conditions) > 0) {
@@ -49,9 +47,9 @@ class IpController extends Controller
                         ->orderBy('regdate');
         }
 
-        $bookings = paginate($model, 10, $page, $link);
+        $ips = paginate($model, 10, $page, $request);
 
-        $data = json_encode($bookings, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
+        $data = json_encode($ips, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
         return $response
                 ->withStatus(200)
