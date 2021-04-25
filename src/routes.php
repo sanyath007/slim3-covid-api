@@ -18,6 +18,7 @@ $app->post('/login', 'LoginController:login')->setName('login');
 
 $app->get('/stats/{month}/patients', 'DashboardController:overallPatientStats');
 $app->get('/stats/{month}/beds', 'DashboardController:overallBedStats');
+$app->get('/stats/{month}/admit-day', 'DashboardController:admitDayStats');
 
 $app->get('/beds', 'BedController:getAll');
 $app->get('/beds/{id}', 'BedController:getById');

@@ -36,4 +36,19 @@ class DashboardController extends Controller
 
         return $res->withJson(collect(DB::select($sql, [$sdate, $edate]))->first());
     }
+    
+    public function admitDayStats($req, $res, $args)
+    {
+        $sdate = $args['month']. '-01';
+        $edate = $args['month']. '-31';
+
+        $sql="SELECT CAST(DAY(reg_date) AS SIGNED) AS d,
+                COUNT(DISTINCT an) as num_pt
+                FROM registrations
+                WHERE (reg_date BETWEEN ? AND ?)
+                GROUP BY CAST(DAY(reg_date) AS SIGNED) 
+                ORDER BY CAST(DAY(reg_date) AS SIGNED) ";
+
+        return $res->withJson(DB::select($sql, [$sdate, $edate]));
+    }
 }
