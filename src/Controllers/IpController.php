@@ -14,15 +14,18 @@ class IpController extends Controller
     {
         $conditions = [];
         $page = (int)$request->getQueryParam('page');
-        $ward = (int)$request->getQueryParam('ward');
+        $ward = $request->getQueryParam('ward');
+        $dchdate = (int)$request->getQueryParam('dchdate') == '0' ? false : true;
 
-        if(!empty($ward)) array_push($conditions, ['ward' => $ward]);
+        if(!empty($ward)) array_push($conditions, ['ward', '=', $ward]);
 
         $regists = Registration::pluck('an')->all();
 
         if(count($conditions) > 0) {
             $model = HIp::with('hpatient', 'hward', 'hanstat')
-                        // ->whereNull('dchdate')
+                        ->when($dchdate, function($q) {
+                            $q->whereNull('dchdate');
+                        })
                         ->whereIn('ward', ['00','05','06'])
                         ->whereNotExists(function($q) {
                             $q->select(DB::raw(1))
@@ -35,7 +38,9 @@ class IpController extends Controller
                         ->orderBy('regdate');
         } else {
             $model = HIp::with('hpatient', 'hward', 'hanstat')
-                        // ->whereNull('dchdate')
+                        ->when($dchdate, function($q) {
+                            $q->whereNull('dchdate');
+                        })
                         ->whereIn('ward', ['00','05','06'])
                         ->whereNotExists(function($q) {
                             $q->select(DB::raw(1))
