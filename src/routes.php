@@ -16,8 +16,8 @@ $app->get('/', 'HomeController:home')->setName('home');
 
 $app->post('/login', 'LoginController:login')->setName('login');
 
-$app->get('/dashboard/or-visit/{month}', 'DashboardController:orVisitMonth');
-$app->get('/dashboard/or-type/{month}', 'DashboardController:orTypeMonth');
+$app->get('/stats/{month}/patients', 'DashboardController:overallPatientStats');
+$app->get('/stats/{month}/beds', 'DashboardController:overallBedStats');
 
 $app->get('/beds', 'BedController:getAll');
 $app->get('/beds/{id}', 'BedController:getById');
