@@ -16,68 +16,68 @@ $app->get('/', 'HomeController:home')->setName('home');
 
 $app->post('/login', 'LoginController:login')->setName('login');
 
-$app->get('/stats/{month}/patients', 'DashboardController:overallPatientStats');
-$app->get('/stats/{month}/beds', 'DashboardController:overallBedStats');
-$app->get('/stats/{month}/admit-day', 'DashboardController:admitDayStats');
-$app->get('/stats/{month}/collect-day', 'DashboardController:collectDayStats');
-
-$app->get('/beds', 'BedController:getAll');
-$app->get('/beds/{id}', 'BedController:getById');
-$app->get('/beds/ward/{ward}/{status}', 'BedController:getByWard'); // TODO: to be change
-$app->post('/beds', 'BedController:store');
-$app->put('/beds/{id}', 'BedController:update');
-$app->delete('/beds/{id}', 'BedController:delete');
-$app->get('/beds/{bed}/used', 'BedController:getBedUsed');
-
-$app->get('/bed-types', 'BedTypeController:getAll');
-$app->get('/bed-types/{id}', 'BedTypeController:getById');
-$app->post('/bed-types', 'BedTypeController:store');
-$app->put('/bed-types/{id}', 'BedTypeController:update');
-$app->delete('/bed-types/{id}', 'BedTypeController:delete');
-
-$app->get('/wards', 'WardController:getAll');
-$app->get('/wards/{ward}', 'WardController:getById');
-$app->post('/wards', 'BuildingController:store');
-$app->put('/wards/{id}', 'BuildingController:update');
-$app->delete('/wards/{id}', 'BuildingController:delete');
-
-$app->get('/buildings', 'BuildingController:getAll');
-$app->get('/buildings/{id}', 'BuildingController:getById');
-$app->post('/buildings', 'BuildingController:store');
-$app->put('/buildings/{id}', 'BuildingController:update');
-$app->delete('/buildings/{id}', 'BuildingController:delete');
-
-$app->get('/patients', 'PatientController:getAll');
-$app->get('/patients/{hn}', 'PatientController:getById');
-$app->post('/patients', 'PatientController:store');
-$app->put('/patients/{id}', 'PatientController:update');
-$app->delete('/patients/{id}', 'PatientController:delete');
-
-$app->get('/registrations', 'RegistrationController:getAll');
-$app->get('/registrations/{id}', 'RegistrationController:getById');
-$app->get('/registrations/an/{an}', 'RegistrationController:getByAn');
-$app->get('/registrations/last/order-no', 'RegistrationController:generateOrderNo');
-$app->post('/registrations', 'RegistrationController:store');
-$app->put('/registrations/{id}', 'RegistrationController:update');
-$app->put('/registrations/cancel/{id}', 'RegistrationController:cancel');
-$app->delete('/registrations/{id}', 'RegistrationController:delete');
-$app->put('/registrations/discharge/{id}', 'RegistrationController:discharge');
-$app->put('/registrations/lab-result/{id}', 'RegistrationController:labResult');
-
-/** Routes to person db */
-$app->get('/depts', 'DeptController:getAll');
-$app->get('/depts/{id}', 'DeptController:getById');
-
-$app->get('/staffs', 'StaffController:getAll');
-$app->get('/staffs/{id}', 'StaffController:getById');
-
-/** Routes to hosxp db */
-$app->get('/ips', 'IpController:getAll');
-$app->get('/ips/{an}', 'IpController:getById');
-
 $app->group('/api', function(Slim\App $app) { 
     $app->get('/users', 'UserController:index');
     $app->get('/users/{loginname}', 'UserController:getUser');
+
+    $app->get('/stats/{month}/patients', 'DashboardController:overallPatientStats');
+    $app->get('/stats/{month}/beds', 'DashboardController:overallBedStats');
+    $app->get('/stats/{month}/admit-day', 'DashboardController:admitDayStats');
+    $app->get('/stats/{month}/collect-day', 'DashboardController:collectDayStats');
+    
+    $app->get('/beds', 'BedController:getAll');
+    $app->get('/beds/{id}', 'BedController:getById');
+    $app->get('/beds/ward/{ward}/{status}', 'BedController:getByWard'); // TODO: to be change
+    $app->post('/beds', 'BedController:store');
+    $app->put('/beds/{id}', 'BedController:update');
+    $app->delete('/beds/{id}', 'BedController:delete');
+    $app->get('/beds/{bed}/used', 'BedController:getBedUsed');
+
+    $app->get('/bed-types', 'BedTypeController:getAll');
+    $app->get('/bed-types/{id}', 'BedTypeController:getById');
+    $app->post('/bed-types', 'BedTypeController:store');
+    $app->put('/bed-types/{id}', 'BedTypeController:update');
+    $app->delete('/bed-types/{id}', 'BedTypeController:delete');
+
+    $app->get('/wards', 'WardController:getAll');
+    $app->get('/wards/{ward}', 'WardController:getById');
+    $app->post('/wards', 'BuildingController:store');
+    $app->put('/wards/{id}', 'BuildingController:update');
+    $app->delete('/wards/{id}', 'BuildingController:delete');
+
+    $app->get('/buildings', 'BuildingController:getAll');
+    $app->get('/buildings/{id}', 'BuildingController:getById');
+    $app->post('/buildings', 'BuildingController:store');
+    $app->put('/buildings/{id}', 'BuildingController:update');
+    $app->delete('/buildings/{id}', 'BuildingController:delete');
+
+    $app->get('/patients', 'PatientController:getAll');
+    $app->get('/patients/{hn}', 'PatientController:getById');
+    $app->post('/patients', 'PatientController:store');
+    $app->put('/patients/{id}', 'PatientController:update');
+    $app->delete('/patients/{id}', 'PatientController:delete');
+
+    $app->get('/registrations', 'RegistrationController:getAll');
+    $app->get('/registrations/{id}', 'RegistrationController:getById');
+    $app->get('/registrations/an/{an}', 'RegistrationController:getByAn');
+    $app->get('/registrations/last/order-no', 'RegistrationController:generateOrderNo');
+    $app->post('/registrations', 'RegistrationController:store');
+    $app->put('/registrations/{id}', 'RegistrationController:update');
+    $app->put('/registrations/cancel/{id}', 'RegistrationController:cancel');
+    $app->delete('/registrations/{id}', 'RegistrationController:delete');
+    $app->put('/registrations/discharge/{id}', 'RegistrationController:discharge');
+    $app->put('/registrations/lab-result/{id}', 'RegistrationController:labResult');
+
+    /** Routes to person db */
+    $app->get('/depts', 'DeptController:getAll');
+    $app->get('/depts/{id}', 'DeptController:getById');
+
+    $app->get('/staffs', 'StaffController:getAll');
+    $app->get('/staffs/{id}', 'StaffController:getById');
+
+    /** Routes to hosxp db */
+    $app->get('/ips', 'IpController:getAll');
+    $app->get('/ips/{an}', 'IpController:getById');
 });
 
 // Catch-all route to serve a 404 Not Found page if none of the routes match
