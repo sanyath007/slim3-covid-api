@@ -30,8 +30,7 @@ class LoginController extends Controller
                 ]
             ];
 
-            $secret = getenv("JWT_SECRET");            
-            $token = JWT::encode($payload, $secret, "HS256");       
+            $token = JWT::encode($payload, getenv("JWT_SECRET"), "HS256");       
 
             return $res->withStatus(201)
                     ->withHeader("Content-Type", "application/json")

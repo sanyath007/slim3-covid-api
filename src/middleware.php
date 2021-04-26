@@ -45,10 +45,11 @@ $container['jwt'] = function($c) {
 };
 
 $app->add(new Slim\Middleware\JwtAuthentication([
-    "path"          => '/api',
+    "path"          => ["/api", "/admin"],
     "logger"        => $container['logger'],
-    "passthrough"   => ["/test"],
     "secret"        => getenv("JWT_SECRET"),
+    "algorithm"     => ["HS256"],
+    "secure"        => false,
     "callback"      => function($req, $res, $args) use ($container) {
         $container['jwt'] = $args['decoded'];
     },
