@@ -27,7 +27,6 @@ $app->group('/api', function(Slim\App $app) {
     
     $app->get('/beds', 'BedController:getAll');
     $app->get('/beds/{id}', 'BedController:getById');
-    $app->get('/beds/ward/{ward}/{status}', 'BedController:getByWard'); // TODO: to be change
     $app->post('/beds', 'BedController:store');
     $app->put('/beds/{id}', 'BedController:update');
     $app->delete('/beds/{id}', 'BedController:delete');
@@ -41,9 +40,10 @@ $app->group('/api', function(Slim\App $app) {
 
     $app->get('/wards', 'WardController:getAll');
     $app->get('/wards/{ward}', 'WardController:getById');
-    $app->post('/wards', 'BuildingController:store');
-    $app->put('/wards/{id}', 'BuildingController:update');
-    $app->delete('/wards/{id}', 'BuildingController:delete');
+    $app->post('/wards', 'WardController:store');
+    $app->put('/wards/{id}', 'WardController:update');
+    $app->delete('/wards/{id}', 'WardController:delete');
+    $app->get('/wards/{ward}/beds', 'WardController:getWardBeds');
 
     $app->get('/buildings', 'BuildingController:getAll');
     $app->get('/buildings/{id}', 'BuildingController:getById');
