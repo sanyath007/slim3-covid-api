@@ -55,6 +55,9 @@ class WardController extends Controller
         $ward->ward_tel = $post['ward_tel'];
         $ward->ward_head_name = $post['ward_head_name'];
         $ward->ward_head_tel = $post['ward_head_tel'];
+        $ward->building = $post['building'];
+        $ward->floor = $post['floor'];
+        $ward->bed_max = $post['bed_max'];
         
         if($ward->save()) {
             return $response->withStatus(200)
@@ -73,6 +76,9 @@ class WardController extends Controller
         $ward->ward_tel = $post['ward_tel'];
         $ward->ward_head_name = $post['ward_head_name'];
         $ward->ward_head_tel = $post['ward_head_tel'];
+        $ward->building = $post['building'];
+        $ward->floor = $post['floor'];
+        $ward->bed_max = $post['bed_max'];
         
         if($ward->save()) {
             return $response->withStatus(200)
