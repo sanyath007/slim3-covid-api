@@ -8,6 +8,8 @@ class Ward extends Model
 {
     protected $table = "wards";
 
+    protected $primaryKey = 'ward_id';
+
     public function bed()
     {
         return $this->hasMany(Bed::class, 'ward', 'ward_id');

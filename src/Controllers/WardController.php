@@ -45,42 +45,50 @@ class WardController extends Controller
                 ->write($data);
     }
 
-    // public function store($request, $response, $args)
-    // {
-    //     $post = (array)$request->getParsedBody();
+    public function store($request, $response, $args)
+    {
+        $post = (array)$request->getParsedBody();
 
-    //     $ward = new Ward;
-    //     $ward->name = $post['ward_name'];
+        $ward = new Ward;
+        $ward->ward_id = $post['ward_id'];
+        $ward->ward_name = $post['ward_name'];
+        $ward->ward_tel = $post['ward_tel'];
+        $ward->ward_head_name = $post['ward_head_name'];
+        $ward->ward_head_tel = $post['ward_head_tel'];
         
-    //     if($ward->save()) {
-    //         return $response->withStatus(200)
-    //                 ->withHeader("Content-Type", "application/json")
-    //                 ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-    //     }                    
-    // }
+        if($ward->save()) {
+            return $response->withStatus(200)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+        }                    
+    }
 
-    // public function update($request, $response, $args)
-    // {
-    //     $post = (array)$request->getParsedBody();
+    public function update($request, $response, $args)
+    {
+        $post = (array)$request->getParsedBody();
 
-    //     $ward = Ward::where('ward', $args['id'])->first();
-    //     $ward->name = $post['ward_name'];
+        $ward = Ward::where('ward_id', $args['id'])->first();
+        $ward->ward_id = $post['ward_id'];
+        $ward->ward_name = $post['ward_name'];
+        $ward->ward_tel = $post['ward_tel'];
+        $ward->ward_head_name = $post['ward_head_name'];
+        $ward->ward_head_tel = $post['ward_head_tel'];
         
-    //     if($ward->save()) {
-    //         return $response->withStatus(200)
-    //                 ->withHeader("Content-Type", "application/json")
-    //                 ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-    //     }
-    // }
+        if($ward->save()) {
+            return $response->withStatus(200)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+        }
+    }
 
-    // public function delete($request, $response, $args)
-    // {
-    //     $ward = Ward::where('ward', $args['id'])->first();
+    public function delete($request, $response, $args)
+    {
+        $ward = Ward::where('ward_id', $args['id'])->first();
         
-    //     if($ward->delete()) {    
-    //         return $response->withStatus(200)
-    //                 ->withHeader("Content-Type", "application/json")
-    //                 ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-    //     }
-    // }
+        if($ward->delete()) {    
+            return $response->withStatus(200)
+                    ->withHeader("Content-Type", "application/json")
+                    ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+        }
+    }
 }
