@@ -152,8 +152,7 @@ class BedController extends Controller
         $bed->description = $post['description'];
         $bed->bed_type = $post['bed_type'];
         $bed->ward = $post['ward'];
-        // $bed->bed_img_url = $img_url;
-        $bed->bed_status = 0;
+        $bed->bed_status = $post['bed_status'];
 
         if($bed->save()) {   
             $data = [
