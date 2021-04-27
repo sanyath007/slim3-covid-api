@@ -79,49 +79,28 @@ class BedController extends Controller
         $post = (array)$request->getParsedBody();
 
         try {
-            // TODO: separate uploads to another method
             /** Upload image */
-            // $link = 'http://'.$request->getServerParam('SERVER_NAME').$request->getServerParam('REDIRECT_URL');
-            // if(preg_match("/^data:image\/(?<extension>(?:png|gif|jpg|jpeg));base64,(?<image>.+)$/", $post['bed_img_url'], $matchings))
-            // {
-            //     $img_data = file_get_contents($post['bed_img_url']);
-            //     $extension = $matchings['extension'];
-            //     $img_name = uniqid().'.'.$extension;
-            //     $img_url = str_replace('/rooms', '/assets/uploads/'.$img_name, $link);
-            //     $file_to_upload = 'assets/uploads/'.$img_name;
+            // $img_url = $this->uploadImg();
 
-            //     if(file_put_contents($file_to_upload, $img_data)) {
-            //         // echo $img_url;
-            //     }
+            $bed = new Bed;
+            $bed->bed_no = $post['bed_no'];
+            $bed->bed_name = $post['bed_name'];
+            $bed->description = $post['description'];
+            $bed->bed_type = $post['bed_type'];
+            $bed->ward = $post['ward'];
+            $bed->bed_status = 0;
+
+            // if ($img_url) {
+                // $bed->bed_img_url = $img_url : ;
             // }
 
-            $room = new Bed;
-            $room->room_no = $post['room_no'];
-            $room->room_name = $post['room_name'];
-            $room->description = $post['description'];
-            $room->room_type = $post['room_type'];
-            $room->room_group = $post['room_group'];
-            $room->building = $post['building'];
-            $room->floor = $post['floor'];
-            $room->room_img_url = $img_url;
-            $room->room_status = 0;
-
-            if($room->save()) {
-                $newRoomId = $room->id;
-                $amenities = explode(",", $post['amenities']);
-
-                foreach($amenities as $amenity) {
-                    $ra = new RoomAmenities();
-                    $ra->room_id = $newRoomId;
-                    $ra->amenity_id = $amenity;
-                    $ra->status = 1;
-                    $ra->save();
-                }
+            if($bed->save()) {
+                $newBedId = $bed->bed_id;
 
                 $data = [
                     'status' => 1,
                     'message' => 'Insertion successfully!!',
-                    'item' => $room
+                    'bed' => $bed
                 ];
 
                 return $response->withStatus(200)
@@ -129,8 +108,8 @@ class BedController extends Controller
                         ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
             } // end if
         } catch (\Throwable $th) {
-            /** Delete new room if error occurs */
-            Bed::find($newRoomId)->delete();
+            /** Delete new bed if error occurs */
+            Bed::find($newBedId)->delete();
             
             /** And set data to client with http status 500 */
             $data = [
@@ -144,25 +123,43 @@ class BedController extends Controller
         } // end trycatch
     }
 
+    private function uploadImg()
+    {
+        $link = 'http://'.$request->getServerParam('SERVER_NAME').$request->getServerParam('REDIRECT_URL');
+        if(preg_match("/^data:image\/(?<extension>(?:png|gif|jpg|jpeg));base64,(?<image>.+)$/", $post['bed_img_url'], $matchings))
+        {
+            $img_data = file_get_contents($post['bed_img_url']);
+            $extension = $matchings['extension'];
+            $img_name = uniqid().'.'.$extension;
+            $img_url = str_replace('/rooms', '/assets/uploads/'.$img_name, $link);
+            $file_to_upload = 'assets/uploads/'.$img_name;
+
+            if(file_put_contents($file_to_upload, $img_data)) {
+                return $img_url;
+            }
+        }
+
+        return false;
+    }
+
     public function update($request, $response, $args)
     {
         $post = (array)$request->getParsedBody();
 
-        $room = Bed::where('id', $args['id'])->first();
-        $room->name = $post['name'];
-        $room->unit = $post['unit'];
-        $room->cost = $post['cost'];
-        $room->stock = $post['stock'];
-        $room->min = $post['min'];
-        $room->balance = $post['balance'];
-        $room->item_type = $post['item_type'];        
-        $room->item_group = $post['item_group'];
+        $bed = Bed::where('bed_id', $args['id'])->first();
+        $bed->bed_no = $post['bed_no'];
+        $bed->bed_name = $post['bed_name'];
+        $bed->description = $post['description'];
+        $bed->bed_type = $post['bed_type'];
+        $bed->ward = $post['ward'];
+        // $bed->bed_img_url = $img_url;
+        $bed->bed_status = 0;
 
-        if($room->save()) {   
+        if($bed->save()) {   
             $data = [
                 'status' => 1,
                 'message' => 'Update successfully!!',
-                'item' => $room
+                'bed' => $bed
             ];
 
             return $response->withStatus(200)
@@ -173,12 +170,12 @@ class BedController extends Controller
 
     public function delete($request, $response, $args)
     {
-        $room = Bed::where('id', $args['id'])->first();
+        $bed = Bed::where('bed_id', $args['id'])->first();
         
-        if($room->delete()) {
+        if($bed->delete()) {
             return $response->withStatus(200)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($room, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                    ->write(json_encode($bed, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
     }
 }
