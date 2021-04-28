@@ -28,7 +28,19 @@ class BuildingController extends Controller
     
     public function getBuildingWards($request, $response, $args)
     {
-        $building = Building::with('wards')->where('id', $args['id'])->first();
+        $sortBy = $request->getQueryParam('sort');
+
+        $building = Building::where('id', $args['id'])
+                        ->when($sortBy, function($sub) use ($sortBy) {
+                            $sub->with(['wards' => function($q) use ($sortBy) {
+                                $q->orderBy($sortBy);
+                            }]);
+                        }, function($sub) {
+                            $sub->with(['wards' => function($q) {
+                                $q->orderBy('ward_no');
+                            }]);
+                        })
+                        ->first();
 
         return $response->withStatus(200)
                 ->withHeader("Content-Type", "application/json")
