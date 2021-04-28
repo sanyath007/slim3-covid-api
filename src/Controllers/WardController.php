@@ -29,11 +29,15 @@ class WardController extends Controller
 
     public function getWardBeds($request, $response, $args)
     {
-        $status = (int)$request->getQueryParam('status') == '0' ? false : true;
+        $status = $request->getQueryParam('status');
+        $hasOrBed = (int)$request->getQueryParam('orBed') === 0 ? false : true ;
 
         $beds = Bed::where(['ward' => $args['ward']])
-                    ->when($status, function($q) use ($status) {
+                    ->when(!is_null($status), function($q) use ($status) {
                         $q->where(['bed_status' => $status]);
+                    })
+                    ->when($hasOrBed, function($q) use ($request) {
+                        $q->orWhere(['bed_id' => $request->getQueryParam('orBed')]);
                     })
                     ->orderBy('bed_no')
                     ->get();
