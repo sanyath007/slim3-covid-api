@@ -69,27 +69,29 @@ class RegistrationController extends Controller
         try {
             $post = (array)$request->getParsedBody();
 
-            $booking = new Registration;
-            $booking->an = $post['an'];
-            $booking->book_date = $post['book_date'];
-            $booking->book_name = $post['book_name'];
-            $booking->book_tel = $post['book_tel'];
-            $booking->description = $post['description'];
-            $booking->remark = $post['remark'];
-            $booking->room_types = $post['room_types'];
-            $booking->is_officer = $post['is_officer'];
-            $booking->user = $post['user'];
-            $booking->ward = $post['ward'];
-            $booking->book_status = 0;
+            $reg = new Registration;
+            $reg->an = $post['an'];
+            $reg->hn = $post['hn'];
+            $reg->reg_date = $post['reg_date'];
+            $reg->ward = $post['ward'];
+            $reg->bed = $post['bed'];
+            $reg->code = $post['code'];
+            $reg->lab_date = $post['lab_date'];
+            $reg->lab_result = $post['lab_result'];
+            $reg->dx = $post['dx'];
+            $reg->symptom = $post['symptom'];
+            $reg->reg_from = $post['reg_from'];
+            $reg->reg_state = $post['reg_state'];
+            $reg->remark = $post['remark'];
 
-            if($booking->save()) {
+            if($reg->save()) {
                 return $response
                         ->withStatus(200)
                         ->withHeader("Content-Type", "application/json")
                         ->write(json_encode([
                             'status' => 1,
                             'message' => 'Inserting successfully',
-                            'booking' => $booking
+                            'reg' => $reg
                         ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
             } else {
                 return $response
@@ -116,27 +118,26 @@ class RegistrationController extends Controller
         try {
             $post = (array)$request->getParsedBody();
 
-            $booking = Registration::find($args['id']);
-            // $booking->an = $post['an']; // ไม่ให้แก้ไขผู้ป่วย
-            $booking->book_date = $post['book_date'];
-            $booking->book_name = $post['book_name'];
-            $booking->book_tel = $post['book_tel'];
-            $booking->description = $post['description'];
-            $booking->remark = $post['remark'];
-            $booking->room_types = $post['room_types'];
-            $booking->is_officer = $post['is_officer'];
-            $booking->user = $post['user'];
-            $booking->ward = $post['ward'];
-            $booking->book_status = 0;
+            $reg = Registration::find($args['id']);
+            $reg->ward = $post['ward'];
+            $reg->bed = $post['bed'];
+            $reg->code = $post['code'];
+            $reg->lab_date = $post['lab_date'];
+            $reg->lab_result = $post['lab_result'];
+            $reg->dx = $post['dx'];
+            $reg->symptom = $post['symptom'];
+            $reg->reg_from = $post['reg_from'];
+            $reg->reg_state = $post['reg_state'];
+            $reg->remark = $post['remark'];
 
-            if($booking->save()) {
+            if($reg->save()) {
                 return $response
                         ->withStatus(200)
                         ->withHeader("Content-Type", "application/json")
                         ->write(json_encode([
                             'status' => 1,
                             'message' => 'Updating successfully',
-                            'booking' => $booking
+                            'reg' => $reg
                         ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
             } else {
                 return $response
