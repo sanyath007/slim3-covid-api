@@ -39,7 +39,7 @@ $app->group('/api', function(Slim\App $app) {
     $app->delete('/bed-types/{id}', 'BedTypeController:delete');
 
     $app->get('/wards', 'WardController:getAll');
-    $app->get('/wards/{ward}', 'WardController:getById');
+    $app->get('/wards/{id}', 'WardController:getById');
     $app->post('/wards', 'WardController:store');
     $app->put('/wards/{id}', 'WardController:update');
     $app->delete('/wards/{id}', 'WardController:delete');

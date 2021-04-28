@@ -97,29 +97,25 @@ class BedController extends Controller
             if($bed->save()) {
                 $newBedId = $bed->bed_id;
 
-                $data = [
-                    'status' => 1,
-                    'message' => 'Insertion successfully!!',
-                    'bed' => $bed
-                ];
-
                 return $response->withStatus(200)
                         ->withHeader("Content-Type", "application/json")
-                        ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                        ->write(json_encode([
+                            'status' => 1,
+                            'message' => 'Insertion successfully!!',
+                            'bed' => $bed
+                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
             } // end if
         } catch (\Throwable $th) {
             /** Delete new bed if error occurs */
             Bed::find($newBedId)->delete();
             
             /** And set data to client with http status 500 */
-            $data = [
-                'status' => 0,
-                'message' => 'Something went wrong!!'
-            ];
-
             return $response->withStatus(500)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                    ->write(json_encode([
+                        'status' => 0,
+                        'message' => 'Something went wrong!!'
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         } // end trycatch
     }
 

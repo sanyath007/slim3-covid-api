@@ -47,43 +47,83 @@ class WardController extends Controller
 
     public function store($request, $response, $args)
     {
-        $post = (array)$request->getParsedBody();
+        try {
+            $post = (array)$request->getParsedBody();
 
-        $ward = new Ward;
-        $ward->ward_id = $post['ward_id'];
-        $ward->ward_name = $post['ward_name'];
-        $ward->ward_tel = $post['ward_tel'];
-        $ward->ward_head_name = $post['ward_head_name'];
-        $ward->ward_head_tel = $post['ward_head_tel'];
-        $ward->building = $post['building'];
-        $ward->floor = $post['floor'];
-        $ward->bed_max = $post['bed_max'];
-        
-        if($ward->save()) {
-            return $response->withStatus(200)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
-        }                    
+            $ward = new Ward;
+            $ward->ward_no = $post['ward_no'];
+            $ward->ward_name = $post['ward_name'];
+            $ward->ward_tel = $post['ward_tel'];
+            $ward->ward_head_name = $post['ward_head_name'];
+            $ward->ward_head_tel = $post['ward_head_tel'];
+            $ward->building = $post['building'];
+            $ward->floor = $post['floor'];
+            $ward->bed_max = $post['bed_max'];
+            
+            if($ward->save()) {
+                return $response->withStatus(200)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode([
+                            'status' => 1,
+                            'message' => 'Inserting successfully!!',
+                            'ward' => $ward
+                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            } else {
+                return $response->withStatus(200)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode([
+                            'status' => 0,
+                            'message' => 'Something went wrong !!'
+                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            }
+        } catch (\Throwable $th) {
+            return $response->withStatus(500)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode([
+                            'status' => 0,
+                            'message' => 'Something went wrong !!'
+                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+        }
     }
 
     public function update($request, $response, $args)
     {
-        $post = (array)$request->getParsedBody();
+        try {
+            $post = (array)$request->getParsedBody();
 
-        $ward = Ward::where('ward_id', $args['id'])->first();
-        $ward->ward_id = $post['ward_id'];
-        $ward->ward_name = $post['ward_name'];
-        $ward->ward_tel = $post['ward_tel'];
-        $ward->ward_head_name = $post['ward_head_name'];
-        $ward->ward_head_tel = $post['ward_head_tel'];
-        $ward->building = $post['building'];
-        $ward->floor = $post['floor'];
-        $ward->bed_max = $post['bed_max'];
-        
-        if($ward->save()) {
-            return $response->withStatus(200)
-                    ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            $ward = Ward::where('ward_id', $args['id'])->first();
+            $ward->ward_no = $post['ward_no'];
+            $ward->ward_name = $post['ward_name'];
+            $ward->ward_tel = $post['ward_tel'];
+            $ward->ward_head_name = $post['ward_head_name'];
+            $ward->ward_head_tel = $post['ward_head_tel'];
+            $ward->building = $post['building'];
+            $ward->floor = $post['floor'];
+            $ward->bed_max = $post['bed_max'];
+            
+            if($ward->save()) {
+                return $response->withStatus(200)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode([
+                            'status' => 1,
+                            'message' => 'Updating successfully!!',
+                            'ward' => $ward
+                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            } else {
+                return $response->withStatus(200)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode([
+                            'status' => 0,
+                            'message' => 'Something went wrong !!'
+                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            }
+        } catch (\Throwable $th) {
+            return $response->withStatus(500)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode([
+                            'status' => 0,
+                            'message' => 'Something went wrong !!'
+                        ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
     }
 
