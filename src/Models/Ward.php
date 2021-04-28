@@ -19,4 +19,9 @@ class Ward extends Model
     {
         return $this->belongsTo(Building::class, 'building', 'id');
     }
+
+    public function regises()
+    {
+        return $this->hasMany(Registration::class, 'ward', 'ward_id');
+    }
 }

@@ -44,6 +44,7 @@ $app->group('/api', function(Slim\App $app) {
     $app->put('/wards/{id}', 'WardController:update');
     $app->delete('/wards/{id}', 'WardController:delete');
     $app->get('/wards/{ward}/beds', 'WardController:getWardBeds');
+    $app->get('/wards/{id}/regises', 'WardController:getWardRegises');
 
     $app->get('/buildings', 'BuildingController:getAll');
     $app->get('/buildings/{id}', 'BuildingController:getById');

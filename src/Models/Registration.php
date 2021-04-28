@@ -22,4 +22,9 @@ class Registration extends Model
     {
         return $this->setConnection('hos')->hasOne(Ip::class, 'an', 'an');
     }
+
+    public function ward()
+    {
+        return $this->belongsTo(Ward::class, 'ward', 'ward_id');
+    }
 }
