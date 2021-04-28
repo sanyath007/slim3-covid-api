@@ -8,8 +8,8 @@ class Building extends Model
 {
     protected $table = "buildings";
 
-    public function room()
+    public function wards()
     {
-        return $this->hasMany(Room::class, 'building_id', 'building_id');
+        return $this->hasMany(Ward::class, 'building', 'id');
     }
 }

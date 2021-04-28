@@ -25,6 +25,15 @@ class BuildingController extends Controller
                 ->withHeader("Content-Type", "application/json")
                 ->write(json_encode($building, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
     }
+    
+    public function getBuildingWards($request, $response, $args)
+    {
+        $building = Building::with('wards')->where('id', $args['id'])->first();
+
+        return $response->withStatus(200)
+                ->withHeader("Content-Type", "application/json")
+                ->write(json_encode($building, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+    }
 
     public function store($request, $response, $args)
     {

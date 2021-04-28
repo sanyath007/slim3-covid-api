@@ -49,7 +49,8 @@ $app->group('/api', function(Slim\App $app) {
     $app->get('/buildings/{id}', 'BuildingController:getById');
     $app->post('/buildings', 'BuildingController:store');
     $app->put('/buildings/{id}', 'BuildingController:update');
-    $app->delete('/buildings/{id}', 'BuildingController:delete');
+    $app->delete('/buildings/{id}', 'BuildingController:delete');    
+    $app->get('/buildings/{id}/wards', 'BuildingController:getBuildingWards');
 
     $app->get('/patients', 'PatientController:getAll');
     $app->get('/patients/{hn}', 'PatientController:getById');

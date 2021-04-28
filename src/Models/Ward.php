@@ -14,4 +14,9 @@ class Ward extends Model
     {
         return $this->hasMany(Bed::class, 'ward', 'ward_id');
     }
+    
+    public function building()
+    {
+        return $this->belongsTo(Building::class, 'building', 'id');
+    }
 }
