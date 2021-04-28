@@ -165,12 +165,21 @@ class BedController extends Controller
 
     public function delete($request, $response, $args)
     {
-        $bed = Bed::where('bed_id', $args['id'])->first();
-        
-        if($bed->delete()) {
-            return $response->withStatus(200)
+        try {
+            $bed = Bed::where('bed_id', $args['id'])->first();
+            
+            if($bed->delete()) {
+                return $response->withStatus(200)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode($bed, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            }
+        } catch (\Exception $ex) {
+            return $response->withStatus(500)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($bed, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                    ->write(json_encode([
+                        'message' => 'Something went wrong !!!',
+                        'error' => $ex->getMessage()
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
     }
 }
