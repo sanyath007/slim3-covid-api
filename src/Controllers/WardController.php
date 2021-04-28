@@ -144,12 +144,21 @@ class WardController extends Controller
 
     public function delete($request, $response, $args)
     {
-        $ward = Ward::where('ward_id', $args['id'])->first();
-        
-        if($ward->delete()) {    
-            return $response->withStatus(200)
+        try {
+            $ward = Ward::where('ward_id', $args['id'])->first();
+            
+            if($ward->delete()) {    
+                return $response->withStatus(200)
+                        ->withHeader("Content-Type", "application/json")
+                        ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+            }
+        } catch (\Exception $ex) {
+            return $response->withStatus(500)
                     ->withHeader("Content-Type", "application/json")
-                    ->write(json_encode($ward, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
+                    ->write(json_encode([
+                        'message' => 'Something went wrong !!!',
+                        'error' => $ex->getMessage()
+                    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE));
         }
     }
 }
