@@ -14,10 +14,14 @@ class PatientController extends Controller
     {
         $page = (int)$request->getQueryParam('page');
         $dchdate = (int)$request->getQueryParam('dchdate') == '0' ? false : true;
+        $ward = $request->getQueryParam('ward') == '' ? false : true;
 
         $model = Registration::with('patient', 'bed')
                     ->when($dchdate, function($q) {
                         $q->whereNull('dch_date');
+                    })
+                    ->when($ward, function($q) use ($request) {
+                        $q->where('ward', $request->getQueryParam('ward'));
                     })
                     ->orderBy('ward')
                     ->orderBy('reg_date', 'desc');
