@@ -64,6 +64,7 @@ class PatientController extends Controller
                 $reg->an = $post['an'];
                 $reg->hn = $post['hn'];
                 $reg->reg_date = $post['reg_date'];
+                $reg->reg_time = $post['reg_time'];
                 $reg->ward = $post['ward'];
                 $reg->bed = $post['bed'];
                 $reg->code = $post['code'];
