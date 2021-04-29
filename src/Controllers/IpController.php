@@ -23,6 +23,7 @@ class IpController extends Controller
 
         if(count($conditions) > 0) {
             $model = HIp::with('hpatient', 'hward', 'hanstat')
+                        ->with('hpatient.haddress')
                         ->when($dchdate, function($q) {
                             $q->whereNull('dchdate');
                         })
@@ -38,6 +39,7 @@ class IpController extends Controller
                         ->orderBy('regdate');
         } else {
             $model = HIp::with('hpatient', 'hward', 'hanstat')
+                        ->with('hpatient.haddress')
                         ->when($dchdate, function($q) {
                             $q->whereNull('dchdate');
                         })
