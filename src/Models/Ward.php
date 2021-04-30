@@ -10,7 +10,7 @@ class Ward extends Model
 
     protected $primaryKey = 'ward_id';
 
-    public function bed()
+    public function beds()
     {
         return $this->hasMany(Bed::class, 'ward', 'ward_id');
     }

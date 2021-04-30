@@ -30,17 +30,19 @@ class WardController extends Controller
     public function getWardBeds($request, $response, $args)
     {
         $status = $request->getQueryParam('status');
-        $hasOrBed = (int)$request->getQueryParam('orBed') === 0 ? false : true ;
+        $orBed = $request->getQueryParam('orBed');
 
-        $beds = Bed::where(['ward' => $args['ward']])
-                    ->when(!is_null($status), function($q) use ($status) {
-                        $q->where(['bed_status' => $status]);
-                    })
-                    ->when($hasOrBed, function($q) use ($request) {
-                        $q->orWhere(['bed_id' => $request->getQueryParam('orBed')]);
-                    })
-                    ->orderBy('bed_no')
-                    ->get();
+        $beds = Ward::with('beds.regis','beds.regis.patient','beds.regis.ward')
+                    ->with(['beds' => function($q) use ($status, $orBed) {
+                        $q->when(!is_null($status), function($sub) use ($status) {
+                            $sub->where('bed_status', $status);
+                        })
+                        ->when(($orBed !== 0), function($sub) use ($orBed) {
+                            $sub->orWhere(['bed_id' => $orBed]);
+                        });
+                    }])
+                    ->where(['ward_id' => $args['ward']])
+                    ->first();
 
         $data = json_encode($beds, JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT |  JSON_UNESCAPED_UNICODE);
 
