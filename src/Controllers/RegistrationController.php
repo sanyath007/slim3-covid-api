@@ -120,6 +120,9 @@ class RegistrationController extends Controller
             $post = (array)$request->getParsedBody();
 
             $reg = Registration::find($args['id']);
+            /** get old bed for updating */
+            $oldBed = $reg->bed;
+
             $reg->ward = $post['ward'];
             $reg->bed = $post['bed'];
             $reg->code = $post['code'];
@@ -132,6 +135,14 @@ class RegistrationController extends Controller
             $reg->remark = $post['remark'];
 
             if($reg->save()) {
+                /** if change bed do this */
+                if($oldBed !== (int)$post['bed']) {
+                    /** Update old bed */
+                    Bed::where('bed_id', $oldBed)->update(['bed_status' => 0]);
+                    /** Update new bed */
+                    Bed::where('bed_id', $post['bed'])->update(['bed_status' => 1]);
+                }
+
                 return $response
                         ->withStatus(200)
                         ->withHeader("Content-Type", "application/json")
