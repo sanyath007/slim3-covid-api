@@ -20,8 +20,8 @@ class Bed extends Model
         return $this->belongsTo(Ward::class, 'ward', 'ward_id');
     }
     
-    public function regBed()
+    public function regis()
     {
-        return $this->belongsTo(RegBed::class, 'bed_id', 'bed_id');
+        return $this->hasOne(Registration::class, 'bed', 'bed_id');
     }
 }

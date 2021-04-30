@@ -30,7 +30,7 @@ $app->group('/api', function(Slim\App $app) {
     $app->post('/beds', 'BedController:store');
     $app->put('/beds/{id}', 'BedController:update');
     $app->delete('/beds/{id}', 'BedController:delete');
-    $app->get('/beds/{bed}/used', 'BedController:getBedUsed');
+    $app->get('/beds/{id}/used', 'BedController:getBedIsUsed');
 
     $app->get('/bed-types', 'BedTypeController:getAll');
     $app->get('/bed-types/{id}', 'BedTypeController:getById');

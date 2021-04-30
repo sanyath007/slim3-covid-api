@@ -13,13 +13,19 @@ class BedController extends Controller
     public function getAll($request, $response, $args)
     {
         $page = (int)$request->getQueryParam('page');
+        $withStatus = (int)$request->getQueryParam('status') === 0 ? false : true ;
+
+        $model = Bed::with('bedType', 'ward', 'regis')
+                    ->when($withStatus, function($q) use ($request) {
+                        $q->where('bed_status', '1');
+                    })
+                    ->orderBy('bed_no');
 
         if ($page) {
-            $link = 'http://localhost'. $request->getServerParam('REDIRECT_URL');
-            $data = paginate(Bed::with('bedType', 'ward')->orderBy('bed_no'), 10, $page, $link);
+            $data = paginate($model, 10, $page, $request);
         } else {
             $data = [
-                'items' => Bed::with('bedType', 'ward')->orderBy('bed_no')->get()
+                'items' => $model->get()
             ];
         }
 
@@ -58,11 +64,11 @@ class BedController extends Controller
                 ->write($data);
     }
     
-    public function getBedUsed($request, $response, $args)
+    public function getBedIsUsed($request, $response, $args)
     {
-        $used = Registration::with('patient', 'bed')
-                    ->where(['bed' => $args['bed']])
-                    ->whereNull('dch_date')
+        $used = Bed::with('regis', 'regis.patient')
+                    ->where(['bed_id' => $args['id']])
+                    // ->whereNull('dch_date')
                     ->first();
 
         $data = json_encode([
