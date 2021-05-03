@@ -32,7 +32,10 @@ class WardController extends Controller
         $status = $request->getQueryParam('status');
         $orBed = $request->getQueryParam('orBed');
 
-        $beds = Ward::with('beds.regis','beds.regis.patient','beds.regis.ward')
+        $beds = Ward::with('beds.regis.patient','beds.regis.ward')
+                    ->with(['beds.regis' => function($q) {
+                        $q->whereNull('dch_date');
+                    }])
                     ->with(['beds' => function($q) use ($status, $orBed) {
                         $q->when(!is_null($status), function($sub) use ($status) {
                             $sub->where('bed_status', $status);
